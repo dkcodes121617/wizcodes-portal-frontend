@@ -1,15 +1,16 @@
 import type { NextConfig } from "next";
 
+import { fallbackApiUrl } from "./src/lib/urls";
+
 const isDev = process.env.NODE_ENV === "development";
 
 /**
  * The backend origin is allow-listed in connect-src so the browser may call it.
- * It comes from the same single variable the app uses at runtime, which keeps
- * the CSP and the API client from drifting apart.
+ * It resolves through the same fallback the runtime client uses, so the CSP and
+ * the API client cannot drift apart — including when the variable is unset.
  */
 const apiOrigin = (() => {
-  const raw = process.env.NEXT_PUBLIC_API_URL;
-  if (!raw) return "";
+  const raw = process.env.NEXT_PUBLIC_API_URL?.trim() || fallbackApiUrl(!isDev);
   try {
     return new URL(raw).origin;
   } catch {

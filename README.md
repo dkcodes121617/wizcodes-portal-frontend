@@ -16,15 +16,19 @@ npm run dev
 
 Open <http://localhost:3000>.
 
-**That is genuinely it.** You do not need a `.env` file locally — the app
-defaults to `http://localhost:8000`, which is exactly where the backend's
-`python main.py` serves. Start the backend and the two are already talking.
+**That is genuinely it.** No `.env` file is required — the app defaults to
+`http://localhost:8000`, exactly where the backend's `python main.py` serves.
+Start the backend and the two are already talking.
 
-Only create `.env.local` if your backend runs somewhere else:
+Create `.env.local` only to override that (for example, to develop against the
+deployed backend without running Python locally):
 
 ```bash
 cp .env.example .env.local      # then edit NEXT_PUBLIC_API_URL
 ```
+
+> `.env.local` is the "real values" file and is gitignored — it will not appear
+> in the repo. `.env.example` is the committed template.
 
 ---
 
@@ -44,12 +48,21 @@ cp .env.example .env.local      # then edit NEXT_PUBLIC_API_URL
 
 ## Talking to the backend
 
-One variable connects the two apps: **`NEXT_PUBLIC_API_URL`**.
+One variable connects the two apps: **`NEXT_PUBLIC_API_URL`**. You do not have
+to set it anywhere — both defaults are already correct.
 
-| Where      | Value                                       | Who sets it             |
-| ---------- | ------------------------------------------- | ----------------------- |
-| Local      | `http://localhost:8000` (automatic default) | nobody — it just works  |
-| Production | `https://<service>.onrender.com`            | you, in Vercel settings |
+| Where      | Resolves to                                    | Who sets it |
+| ---------- | ---------------------------------------------- | ----------- |
+| Local      | `http://localhost:8000`                        | automatic   |
+| Production | `https://wizcodes-portal-backend.onrender.com` | automatic   |
+
+Setting the variable always wins — use it to point local dev at the deployed
+backend, or after moving to a custom domain. The fallbacks live in
+[src/lib/urls.ts](src/lib/urls.ts), which is also what `next.config.ts` reads to
+build the CSP, so the API client and the `connect-src` allow-list cannot drift.
+
+A value that is set but malformed still fails the build. That is a typo, not an
+omission, and silently ignoring it would be worse.
 
 Never read `process.env.NEXT_PUBLIC_API_URL` directly. Import the client:
 
@@ -127,6 +140,7 @@ src/
 │   ├── not-found.tsx     # 404
 │   └── globals.css       # Tailwind import + all theme tokens
 └── lib/
+    ├── urls.ts           # deployment URLs / fallbacks (single source of truth)
     ├── env.ts            # validated environment access
     └── api.ts            # the backend client
 ```

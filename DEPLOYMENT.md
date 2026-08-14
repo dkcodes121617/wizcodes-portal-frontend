@@ -37,15 +37,17 @@ Vercel auto-detects Next.js. Confirm these and change nothing else:
 
 ---
 
-## 3. Environment variable — the important one
+## 3. Environment variables — none required
 
-Expand **Environment Variables** and add exactly one:
+A production build already defaults to
+`https://wizcodes-portal-backend.onrender.com`, so you can deploy without
+setting anything.
+
+Set it explicitly only if the backend moves:
 
 | Key                   | Value                                          | Environments                        |
 | --------------------- | ---------------------------------------------- | ----------------------------------- |
 | `NEXT_PUBLIC_API_URL` | `https://wizcodes-portal-backend.onrender.com` | Production, Preview, Development ✅ |
-
-Tick **all three** environment checkboxes.
 
 Rules that will save you an hour:
 
@@ -53,10 +55,6 @@ Rules that will save you an hour:
 - **Include `https://`.** A bare hostname fails the build with a clear message.
 - This value is **baked in at build time**, not read at runtime. Changing it
   requires a **redeploy**, not just a restart.
-
-If you forget it entirely, the production build **fails on purpose** with a
-message telling you where to set it — better than a site that silently fetches
-from nowhere.
 
 ---
 

@@ -5,36 +5,31 @@
  * backend. Nothing else in the app should read `process.env` for the API host —
  * import `env` from here instead.
  *
- * The rules are deliberately forgiving locally and strict in production:
+ * Nothing has to be configured for the app to work in either place:
  *
- *   local dev   -> unset is fine, it falls back to http://localhost:8000,
- *                  which is exactly where `python main.py` serves. No .env
- *                  file is needed to start working.
- *   production  -> unset is a hard build failure with a message that says
- *                  where to set it. Better a red build than a site that
- *                  silently fetches from the wrong place.
+ *   local dev   -> falls back to http://localhost:8000, exactly where
+ *                  `python main.py` serves. No .env file needed.
+ *   production  -> falls back to the deployed Render service.
+ *
+ * Setting the variable always wins; the fallbacks only stop a forgotten
+ * variable from breaking the site. Both live in `urls.ts` so the runtime
+ * client and the CSP in `next.config.ts` can never disagree.
+ *
+ * A value that IS set but malformed still throws — that is a typo, not an
+ * omission, and silently ignoring it would be worse than failing.
  *
  * Next.js inlines `NEXT_PUBLIC_*` at build time, so these must be referenced by
  * their full literal name — never `process.env[someVariable]` — and a change
  * requires a redeploy, not just a restart.
  */
 
-/** Where `python main.py` listens by default. */
-const LOCAL_API_FALLBACK = "http://localhost:8000";
+import { fallbackApiUrl } from "@/lib/urls";
 
 function readApiUrl(): string {
   const raw = process.env.NEXT_PUBLIC_API_URL?.trim();
   const isProductionBuild = process.env.NODE_ENV === "production";
 
-  if (!raw) {
-    if (!isProductionBuild) return LOCAL_API_FALLBACK;
-
-    throw new Error(
-      "NEXT_PUBLIC_API_URL is not set for this production build.\n" +
-        "Set it in Vercel: Project -> Settings -> Environment Variables, e.g.\n" +
-        "  NEXT_PUBLIC_API_URL = https://wizcodes-portal-backend.onrender.com",
-    );
-  }
+  if (!raw) return fallbackApiUrl(isProductionBuild);
 
   let parsed: URL;
   try {

@@ -1,5 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+
+import { PRODUCTION_SITE_URL } from "@/lib/urls";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -15,15 +18,19 @@ const geistMono = Geist_Mono({
 });
 
 /**
- * `metadataBase` resolves relative OG/canonical URLs. Vercel exposes the
- * deployment host as VERCEL_URL, so previews get correct absolute URLs without
- * hardcoding anything.
+ * `metadataBase` resolves relative OG/canonical URLs.
+ *
+ * Resolution order matters: production must use the stable domain, not the
+ * per-deployment VERCEL_URL (`…-abc123.vercel.app`), or every deploy would
+ * publish different canonical URLs. Previews still use VERCEL_URL, which is
+ * exactly what you want there.
  */
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
-  ? new URL(process.env.NEXT_PUBLIC_SITE_URL)
-  : process.env.VERCEL_URL
-    ? new URL(`https://${process.env.VERCEL_URL}`)
-    : new URL("http://localhost:3000");
+const siteUrl = (() => {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return new URL(process.env.NEXT_PUBLIC_SITE_URL);
+  if (process.env.VERCEL_ENV === "production") return new URL(PRODUCTION_SITE_URL);
+  if (process.env.VERCEL_URL) return new URL(`https://${process.env.VERCEL_URL}`);
+  return new URL("http://localhost:3000");
+})();
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
