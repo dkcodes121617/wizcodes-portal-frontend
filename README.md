@@ -30,15 +30,15 @@ cp .env.example .env.local      # then edit NEXT_PUBLIC_API_URL
 
 ## Commands
 
-| Command                | What it does                                    |
-| ---------------------- | ----------------------------------------------- |
-| `npm run dev`          | Development server with hot reload               |
-| `npm run build`        | Production build                                 |
-| `npm run start`        | Serve the production build (run `build` first)   |
-| `npm run lint`         | ESLint                                           |
-| `npm run typecheck`    | TypeScript, no emit                              |
-| `npm run format`       | Prettier (also sorts Tailwind classes)           |
-| `npm run verify`       | lint + typecheck + build — run before pushing    |
+| Command             | What it does                                   |
+| ------------------- | ---------------------------------------------- |
+| `npm run dev`       | Development server with hot reload             |
+| `npm run build`     | Production build                               |
+| `npm run start`     | Serve the production build (run `build` first) |
+| `npm run lint`      | ESLint                                         |
+| `npm run typecheck` | TypeScript, no emit                            |
+| `npm run format`    | Prettier (also sorts Tailwind classes)         |
+| `npm run verify`    | lint + typecheck + build — run before pushing  |
 
 ---
 
@@ -46,10 +46,10 @@ cp .env.example .env.local      # then edit NEXT_PUBLIC_API_URL
 
 One variable connects the two apps: **`NEXT_PUBLIC_API_URL`**.
 
-| Where          | Value                                          | Who sets it              |
-| -------------- | ---------------------------------------------- | ------------------------ |
-| Local          | `http://localhost:8000` (automatic default)    | nobody — it just works   |
-| Production     | `https://<service>.onrender.com`               | you, in Vercel settings  |
+| Where      | Value                                       | Who sets it             |
+| ---------- | ------------------------------------------- | ----------------------- |
+| Local      | `http://localhost:8000` (automatic default) | nobody — it just works  |
+| Production | `https://<service>.onrender.com`            | you, in Vercel settings |
 
 Never read `process.env.NEXT_PUBLIC_API_URL` directly. Import the client:
 
@@ -82,33 +82,33 @@ automatically:
 
 ### Tokens
 
-| Utility                   | Purpose                    | Hex       |
-| ------------------------- | -------------------------- | --------- |
-| `canvas`                  | Page background            | `#F6F9FB` |
-| `surface`                 | Cards, white surfaces      | `#FFFFFF` |
-| `surface-raised`          | Chips, raised surfaces     | `#EEF3F7` |
-| `spotlight`               | Dark spotlight sections    | `#000205` |
-| `spotlight-nested`        | Nested surfaces on dark    | `#0A0D12` |
-| `baby` / `baby-wash`      | Baby blue / light wash     | `#8ECAE6` / `#E4F2F9` |
-| `brand` / `brand-strong`  | Main blue / darker blue    | `#2E90C4` / `#1E7AAB` |
-| `on-baby`                 | Text on baby blue          | `#0B2138` |
-| `ink` / `ink-secondary` / `ink-muted` | Text ramp      | `#15233A` / `#545E6B` / `#667080` |
-| `ink-on-dark` / `ink-muted-on-dark` | Text on navy     | `#EAF4FA` / `#8FA0B5` |
-| `border` / `border-strong` | Borders                   | `#E8EEF2` / `#D4DEE6` |
-| `web` / `mobile` / `ai`   | Category colours           | `#2E90C4` / `#0E9C9C` / `#8B3FD9` |
-| `success` / `warning` / `danger` | Status              | `#1F9D57` / `#B7791F` / `#D64545` |
+| Utility                               | Purpose                 | Hex                               |
+| ------------------------------------- | ----------------------- | --------------------------------- |
+| `canvas`                              | Page background         | `#F6F9FB`                         |
+| `surface`                             | Cards, white surfaces   | `#FFFFFF`                         |
+| `surface-raised`                      | Chips, raised surfaces  | `#EEF3F7`                         |
+| `spotlight`                           | Dark spotlight sections | `#000205`                         |
+| `spotlight-nested`                    | Nested surfaces on dark | `#0A0D12`                         |
+| `baby` / `baby-wash`                  | Baby blue / light wash  | `#8ECAE6` / `#E4F2F9`             |
+| `brand` / `brand-strong`              | Main blue / darker blue | `#2E90C4` / `#1E7AAB`             |
+| `on-baby`                             | Text on baby blue       | `#0B2138`                         |
+| `ink` / `ink-secondary` / `ink-muted` | Text ramp               | `#15233A` / `#545E6B` / `#667080` |
+| `ink-on-dark` / `ink-muted-on-dark`   | Text on navy            | `#EAF4FA` / `#8FA0B5`             |
+| `border` / `border-strong`            | Borders                 | `#E8EEF2` / `#D4DEE6`             |
+| `web` / `mobile` / `ai`               | Category colours        | `#2E90C4` / `#0E9C9C` / `#8B3FD9` |
+| `success` / `warning` / `danger`      | Status                  | `#1F9D57` / `#B7791F` / `#D64545` |
 
 Each category and status colour has a matching `-bg` variant, e.g.
 `bg-success-bg text-success`.
 
 ### Helper classes
 
-| Class                  | Effect                                        |
-| ---------------------- | --------------------------------------------- |
-| `.bg-brand-gradient`   | `#8ECAE6 → #219EBC`, for dark backgrounds/fills |
+| Class                  | Effect                                                   |
+| ---------------------- | -------------------------------------------------------- |
+| `.bg-brand-gradient`   | `#8ECAE6 → #219EBC`, for dark backgrounds/fills          |
 | `.text-brand-gradient` | `#2E90C4 → #1E7AAB` gradient text, for light backgrounds |
-| `.glass`               | Frosted panel — translucent white + `blur(16px)` |
-| `.spotlight`           | Dark band that sets its own text colours       |
+| `.glass`               | Frosted panel — translucent white + `blur(16px)`         |
+| `.spotlight`           | Dark band that sets its own text colours                 |
 
 This is a **light theme by design**. The "spotlight" tokens are intentionally
 dark sections inside a light page, not an OS dark mode, so no

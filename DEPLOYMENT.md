@@ -26,14 +26,14 @@ You need:
 
 Vercel auto-detects Next.js. Confirm these and change nothing else:
 
-| Field                | Value              |
-| -------------------- | ------------------ |
-| **Framework Preset** | `Next.js`          |
-| **Root Directory**   | `./`               |
-| **Build Command**    | `npm run build`    |
-| **Output Directory** | *(leave default)*  |
-| **Install Command**  | `npm ci`           |
-| **Node.js Version**  | `22.x`             |
+| Field                | Value             |
+| -------------------- | ----------------- |
+| **Framework Preset** | `Next.js`         |
+| **Root Directory**   | `./`              |
+| **Build Command**    | `npm run build`   |
+| **Output Directory** | _(leave default)_ |
+| **Install Command**  | `npm ci`          |
+| **Node.js Version**  | `22.x`            |
 
 ---
 
@@ -41,9 +41,9 @@ Vercel auto-detects Next.js. Confirm these and change nothing else:
 
 Expand **Environment Variables** and add exactly one:
 
-| Key                   | Value                                            | Environments                        |
-| --------------------- | ------------------------------------------------ | ----------------------------------- |
-| `NEXT_PUBLIC_API_URL` | `https://wizcodes-portal-backend.onrender.com`   | Production, Preview, Development ✅ |
+| Key                   | Value                                          | Environments                        |
+| --------------------- | ---------------------------------------------- | ----------------------------------- |
+| `NEXT_PUBLIC_API_URL` | `https://wizcodes-portal-backend.onrender.com` | Production, Preview, Development ✅ |
 
 Tick **all three** environment checkboxes.
 
@@ -87,9 +87,9 @@ Preview deployments for other branches are disabled by `vercel.json`
 
 Go back to Render → your service → **Environment** and add:
 
-| Key            | Value                                           |
-| -------------- | ----------------------------------------------- |
-| `FRONTEND_URL` | `https://wizcodes-portal-frontend.vercel.app`   |
+| Key            | Value                                         |
+| -------------- | --------------------------------------------- |
+| `FRONTEND_URL` | `https://wizcodes-portal-frontend.vercel.app` |
 
 CORS is already `*`, so this is informational — but keep it accurate.
 
@@ -123,11 +123,11 @@ Expected: `{"status":"ok","database":"up",...}`
 
 ## Troubleshooting
 
-| Symptom                                          | Cause and fix                                                                        |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------ |
-| Build fails: `NEXT_PUBLIC_API_URL is not set`     | Add it in **Settings → Environment Variables**, then **Redeploy**.                    |
-| Build fails: `not a valid absolute URL`           | Missing `https://` scheme.                                                            |
-| Site loads, API calls fail with a CORS error      | The backend is asleep or down. Hit `/health` on the Render URL directly.               |
-| API calls go to `localhost` in production         | `NEXT_PUBLIC_API_URL` was missing at **build** time. Set it and redeploy.              |
-| Changed the variable but nothing happened         | `NEXT_PUBLIC_*` is inlined at build time — trigger a **Redeploy**.                     |
-| CSP blocks requests to the backend                | `next.config.ts` allow-lists the origin from `NEXT_PUBLIC_API_URL`; redeploy after changing it. |
+| Symptom                                       | Cause and fix                                                                                   |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Build fails: `NEXT_PUBLIC_API_URL is not set` | Add it in **Settings → Environment Variables**, then **Redeploy**.                              |
+| Build fails: `not a valid absolute URL`       | Missing `https://` scheme.                                                                      |
+| Site loads, API calls fail with a CORS error  | The backend is asleep or down. Hit `/health` on the Render URL directly.                        |
+| API calls go to `localhost` in production     | `NEXT_PUBLIC_API_URL` was missing at **build** time. Set it and redeploy.                       |
+| Changed the variable but nothing happened     | `NEXT_PUBLIC_*` is inlined at build time — trigger a **Redeploy**.                              |
+| CSP blocks requests to the backend            | `next.config.ts` allow-lists the origin from `NEXT_PUBLIC_API_URL`; redeploy after changing it. |
