@@ -15,7 +15,7 @@ export default function Home() {
         </p>
 
         <h1 className="mt-4 text-4xl font-semibold tracking-tight">
-          Welcome, <span className="text-brand">Ivyaa</span>
+          Welcome & welcome to my portfolio , <span className="text-brand">Divyaaaaaa</span>
         </h1>
 
         <p className="text-ink-secondary mt-4 text-base">

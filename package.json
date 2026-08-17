@@ -5,6 +5,10 @@
   "engines": {
     "node": ">=20.9.0"
   },
+  "overrides": {
+    "@emnapi/core": "1.11.3",
+    "@emnapi/runtime": "1.11.3"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
