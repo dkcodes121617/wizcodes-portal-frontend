@@ -118,6 +118,12 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
+
+    .animate-card-settle {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: rotate(var(--card-rotate, 0deg)) !important;
+    }
   }
 }
 
@@ -147,5 +153,63 @@
   .spotlight {
     background-color: var(--color-spotlight);
     color: var(--color-ink-on-dark);
+  }
+
+  /* -------------------------------------------------------------------------
+     Landing page utilities
+     ------------------------------------------------------------------------- */
+
+  /* Soft hero atmosphere — canvas fading into baby-wash. */
+  .bg-warm-wash {
+    background-color: var(--color-canvas);
+    background-image: radial-gradient(
+      120% 80% at 50% 0%,
+      var(--color-baby-wash) 0%,
+      var(--color-canvas) 55%
+    );
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+
+  .card-tilt-1 {
+    --card-rotate: -7deg;
+  }
+
+  .card-tilt-2 {
+    --card-rotate: 5deg;
+  }
+
+  .card-tilt-3 {
+    --card-rotate: -4deg;
+  }
+
+  .card-tilt-4 {
+    --card-rotate: 8deg;
+  }
+
+  .animate-card-settle {
+    --stagger-delay: 0ms;
+    animation: card-settle 0.7s ease-out both;
+    animation-delay: var(--stagger-delay);
+    border-radius: 1rem;
+    box-shadow: 0 12px 24px -8px color-mix(in srgb, var(--color-ink) 15%, transparent);
+  }
+}
+
+@keyframes card-settle {
+  from {
+    opacity: 0;
+    transform: translateY(18px) rotate(var(--card-rotate, 0deg));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(var(--card-rotate, 0deg));
   }
 }
