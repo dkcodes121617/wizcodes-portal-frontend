@@ -19,8 +19,7 @@ export default function Home() {
         </h1>
 
         <p className="text-ink-secondary mt-4 text-base">
-          Start your internship journey with WizCodes — sign up or log in to
-          continue.
+          Start your internship journey with WizCodes — sign up or log in to continue.
         </p>
 
         <div className="bg-brand-gradient mx-auto mt-8 h-1 w-24 rounded-full" />

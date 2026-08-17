@@ -28,9 +28,18 @@ export function AuthCard({ title, subtitle, children, footer }: AuthCardProps) {
   );
 }
 
-export function AuthLink({ href, children }: { href: "/login" | "/signup"; children: ReactNode }) {
+export function AuthLink({
+  href,
+  children,
+}: {
+  href: "/login" | "/signup";
+  children: ReactNode;
+}) {
   return (
-    <Link href={href} className="text-brand hover:text-brand-strong font-medium transition-colors">
+    <Link
+      href={href}
+      className="text-brand hover:text-brand-strong font-medium transition-colors"
+    >
       {children}
     </Link>
   );
