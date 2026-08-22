@@ -137,7 +137,10 @@ export default function AdminStudentsPage() {
           {loading ? (
             <p className="text-ink-secondary px-5 py-6 text-sm">Loading students…</p>
           ) : error ? (
-            <p className="bg-danger-bg text-danger m-5 rounded-lg px-4 py-3 text-sm" role="alert">
+            <p
+              className="bg-danger-bg text-danger m-5 rounded-lg px-4 py-3 text-sm"
+              role="alert"
+            >
               {error}
             </p>
           ) : students.length === 0 ? (

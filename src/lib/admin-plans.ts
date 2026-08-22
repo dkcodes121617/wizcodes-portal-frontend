@@ -59,6 +59,9 @@ export async function updateAdminPlan(
   return api.patch<InternshipPlan>(`${ADMIN_PLANS_API_PATH}/${planId}`, body, { token });
 }
 
-export async function deactivateAdminPlan(planId: string, token: string): Promise<InternshipPlan> {
+export async function deactivateAdminPlan(
+  planId: string,
+  token: string,
+): Promise<InternshipPlan> {
   return api.delete<InternshipPlan>(`${ADMIN_PLANS_API_PATH}/${planId}`, { token });
 }

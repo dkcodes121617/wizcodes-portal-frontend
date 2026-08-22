@@ -29,7 +29,9 @@ export function EnrollmentSummary({
       </div>
       {college ? (
         <div>
-          <dt className="text-ink-muted text-xs font-medium tracking-wide uppercase">College</dt>
+          <dt className="text-ink-muted text-xs font-medium tracking-wide uppercase">
+            College
+          </dt>
           <dd className="text-ink mt-1 font-medium">{college}</dd>
         </div>
       ) : null}

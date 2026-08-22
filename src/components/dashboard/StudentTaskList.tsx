@@ -24,7 +24,7 @@ function SubmissionLink({ href, label = "Your submission" }: { href: string; lab
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-brand hover:text-brand-strong mt-1 inline-block break-all text-sm"
+        className="text-brand hover:text-brand-strong mt-1 inline-block text-sm break-all"
       >
         {href}
       </a>
@@ -44,8 +44,7 @@ function TaskCard({
   const [submitting, setSubmitting] = useState(false);
 
   const status = assignment.status as AssignmentStatus;
-  const canSubmit =
-    status === "assigned" || status === "in_progress" || status === "submitted";
+  const canSubmit = status === "assigned" || status === "in_progress" || status === "submitted";
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -69,7 +68,9 @@ function TaskCard({
       const updated = await submitTaskAssignment(assignment.id, link.trim(), token);
       onUpdated(updated);
     } catch (cause) {
-      setError(cause instanceof ApiError ? cause.message : "Submission failed. Please try again.");
+      setError(
+        cause instanceof ApiError ? cause.message : "Submission failed. Please try again.",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -86,7 +87,9 @@ function TaskCard({
         </span>
       </div>
 
-      <p className="text-ink-secondary mt-3 text-sm leading-relaxed">{assignment.task.description}</p>
+      <p className="text-ink-secondary mt-3 text-sm leading-relaxed">
+        {assignment.task.description}
+      </p>
 
       <a
         href={assignment.task.github_link}
@@ -117,7 +120,11 @@ function TaskCard({
       ) : null}
 
       {canSubmit ? (
-        <form className="mt-4 space-y-3" onSubmit={(event) => void handleSubmit(event)} noValidate>
+        <form
+          className="mt-4 space-y-3"
+          onSubmit={(event) => void handleSubmit(event)}
+          noValidate
+        >
           {assignment.submission_link && status === "submitted" ? (
             <SubmissionLink href={assignment.submission_link} label="Current submission" />
           ) : null}
@@ -169,9 +176,7 @@ export function StudentTaskList() {
         if (!cancelled) setTasks(assignments);
       } catch (cause) {
         if (!cancelled) {
-          setError(
-            cause instanceof ApiError ? cause.message : "Could not load your tasks.",
-          );
+          setError(cause instanceof ApiError ? cause.message : "Could not load your tasks.");
         }
       } finally {
         if (!cancelled) setLoading(false);

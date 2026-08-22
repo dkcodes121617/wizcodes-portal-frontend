@@ -16,7 +16,11 @@ import {
 } from "@/lib/admin-students";
 import { fetchPremiumAdminTasks, shortenId, type AdminTask } from "@/lib/admin-tasks";
 import { resolvePaymentScreenshotUrl } from "@/lib/payment";
-import { formatAssignmentStatus, type AssignmentStatus, type StudentTaskAssignment } from "@/lib/tasks";
+import {
+  formatAssignmentStatus,
+  type AssignmentStatus,
+  type StudentTaskAssignment,
+} from "@/lib/tasks";
 
 const PREMIUM_TIER = "premium_999";
 const BASIC_TIER = "basic_299";
@@ -98,7 +102,9 @@ export function StudentDetailPanel({
         }
       } catch (cause) {
         if (!cancelled) {
-          setError(cause instanceof ApiError ? cause.message : "Could not load student details.");
+          setError(
+            cause instanceof ApiError ? cause.message : "Could not load student details.",
+          );
         }
       } finally {
         if (!cancelled) setLoadingDetail(false);
@@ -148,7 +154,9 @@ export function StudentDetailPanel({
       setSelectedTaskIds([]);
       setAssignSuccess(
         `Assigned ${result.newly_created} task(s)` +
-          (result.already_assigned > 0 ? ` (${result.already_assigned} already assigned).` : "."),
+          (result.already_assigned > 0
+            ? ` (${result.already_assigned} already assigned).`
+            : "."),
       );
     } catch (cause) {
       setError(cause instanceof ApiError ? cause.message : "Could not assign tasks.");
@@ -179,7 +187,9 @@ export function StudentDetailPanel({
 
       <div className="flex-1 space-y-6 overflow-y-auto px-5 py-5">
         <section>
-          <p className="text-ink-muted text-xs font-medium tracking-wide uppercase">Enrollment</p>
+          <p className="text-ink-muted text-xs font-medium tracking-wide uppercase">
+            Enrollment
+          </p>
           <dl className="mt-3 space-y-2 text-sm">
             <div className="flex justify-between gap-4">
               <dt className="text-ink-secondary">Plan</dt>
@@ -358,7 +368,10 @@ export function StudentDetailPanel({
             </Button>
 
             {assignSuccess ? (
-              <p className="bg-success-bg text-success mt-3 rounded-lg px-4 py-3 text-sm" role="status">
+              <p
+                className="bg-success-bg text-success mt-3 rounded-lg px-4 py-3 text-sm"
+                role="status"
+              >
                 {assignSuccess}
               </p>
             ) : null}

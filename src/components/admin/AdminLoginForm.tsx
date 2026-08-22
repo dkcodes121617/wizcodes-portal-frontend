@@ -41,7 +41,8 @@ export function AdminLoginForm() {
       router.push("/admin");
     } catch (error) {
       setErrors({
-        form: error instanceof ApiError ? error.message : "Something went wrong. Please try again.",
+        form:
+          error instanceof ApiError ? error.message : "Something went wrong. Please try again.",
       });
     } finally {
       setLoading(false);
@@ -59,7 +60,11 @@ export function AdminLoginForm() {
           <p className="text-ink-secondary mt-2 text-sm">Use your admin email and password</p>
         </div>
 
-        <form className="mt-8 space-y-5" onSubmit={(event) => void handleSubmit(event)} noValidate>
+        <form
+          className="mt-8 space-y-5"
+          onSubmit={(event) => void handleSubmit(event)}
+          noValidate
+        >
           <Input
             label="Email"
             name="email"

@@ -77,13 +77,15 @@ function ReviewPanel({
         </section>
 
         <section>
-          <p className="text-ink-muted text-xs font-medium tracking-wide uppercase">Submission</p>
+          <p className="text-ink-muted text-xs font-medium tracking-wide uppercase">
+            Submission
+          </p>
           {item.submission_link ? (
             <a
               href={item.submission_link}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-brand hover:text-brand-strong mt-2 inline-block break-all text-sm"
+              className="text-brand hover:text-brand-strong mt-2 inline-block text-sm break-all"
             >
               {item.submission_link}
             </a>
@@ -162,7 +164,9 @@ export default function AdminSubmissionsPage() {
     try {
       const data = await fetchSubmittedAssignments(token);
       setItems(data);
-      setSelectedId((current) => (current && data.some((item) => item.id === current) ? current : null));
+      setSelectedId((current) =>
+        current && data.some((item) => item.id === current) ? current : null,
+      );
     } catch (cause) {
       setError(cause instanceof ApiError ? cause.message : "Could not load submissions.");
     } finally {

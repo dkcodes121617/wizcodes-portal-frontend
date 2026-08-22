@@ -179,7 +179,8 @@ export function EnrollForm() {
       router.push("/dashboard");
     } catch (error) {
       setErrors({
-        form: error instanceof ApiError ? error.message : "Enrollment failed. Please try again.",
+        form:
+          error instanceof ApiError ? error.message : "Enrollment failed. Please try again.",
       });
     } finally {
       setSubmitting(false);

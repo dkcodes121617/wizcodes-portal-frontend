@@ -386,7 +386,9 @@ export default function AdminTasksPage() {
             label="Title"
             name="title"
             value={form.title}
-            onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))}
+            onChange={(event) =>
+              setForm((current) => ({ ...current, title: event.target.value }))
+            }
             disabled={saving}
             required
           />
@@ -470,7 +472,10 @@ export default function AdminTasksPage() {
                         Repo link
                       </a>
                     </td>
-                    <td className="text-ink-secondary px-5 py-3 font-mono text-xs" title={task.domain_id}>
+                    <td
+                      className="text-ink-secondary px-5 py-3 font-mono text-xs"
+                      title={task.domain_id}
+                    >
                       {shortenId(task.domain_id)}
                     </td>
                     <td className="text-ink-secondary px-5 py-3">

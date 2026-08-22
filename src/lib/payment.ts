@@ -13,12 +13,7 @@ export const PAYMENT_ACCESS_GRANTED = "granted";
 
 export const PAYMENT_SCREENSHOT_MAX_BYTES = 10 * 1024 * 1024;
 
-const ALLOWED_IMAGE_TYPES = new Set([
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-]);
+const ALLOWED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
 
 export function validatePaymentScreenshotFile(file: File): string | null {
   if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
@@ -68,7 +63,12 @@ export async function uploadPaymentScreenshot(
       (isJson && payload && typeof payload === "object" && "detail" in payload
         ? String((payload as { detail: unknown }).detail)
         : null) ?? `Upload failed with status ${response.status}`;
-    throw new ApiError(response.status, detail, response.headers.get("X-Request-ID") ?? undefined, payload);
+    throw new ApiError(
+      response.status,
+      detail,
+      response.headers.get("X-Request-ID") ?? undefined,
+      payload,
+    );
   }
 
   return payload as StudentProfile;

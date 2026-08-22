@@ -65,7 +65,10 @@ export async function fetchPremiumAdminTasks(
   return api.get<AdminTask[]>(path, { token });
 }
 
-export async function createAdminTask(body: AdminTaskCreateBody, token: string): Promise<AdminTask> {
+export async function createAdminTask(
+  body: AdminTaskCreateBody,
+  token: string,
+): Promise<AdminTask> {
   return api.post<AdminTask>(ADMIN_TASKS_API_PATH, body, { token });
 }
 

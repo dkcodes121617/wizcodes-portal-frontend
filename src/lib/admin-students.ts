@@ -42,12 +42,22 @@ export async function fetchAdminStudents(
   return api.get<AdminStudent[]>(path, { token });
 }
 
-export async function fetchAdminStudent(token: string, studentId: string): Promise<AdminStudent> {
+export async function fetchAdminStudent(
+  token: string,
+  studentId: string,
+): Promise<AdminStudent> {
   return api.get<AdminStudent>(`${ADMIN_STUDENTS_API_PATH}/${studentId}`, { token });
 }
 
-export async function grantStudentAccess(token: string, studentId: string): Promise<AdminStudent> {
-  return api.patch<AdminStudent>(`${ADMIN_STUDENTS_API_PATH}/${studentId}/grant-access`, {}, { token });
+export async function grantStudentAccess(
+  token: string,
+  studentId: string,
+): Promise<AdminStudent> {
+  return api.patch<AdminStudent>(
+    `${ADMIN_STUDENTS_API_PATH}/${studentId}/grant-access`,
+    {},
+    { token },
+  );
 }
 
 export async function fetchStudentAssignments(

@@ -208,7 +208,10 @@ export default function AdminPlansPage() {
         <h2 className="text-ink text-sm font-semibold">
           {formMode === "create" ? "Create plan" : "Edit plan"}
         </h2>
-        <form className="mt-4 grid gap-4 sm:grid-cols-2" onSubmit={(event) => void handleSubmit(event)}>
+        <form
+          className="mt-4 grid gap-4 sm:grid-cols-2"
+          onSubmit={(event) => void handleSubmit(event)}
+        >
           <Select
             label="Tier"
             name="tier"
@@ -232,7 +235,9 @@ export default function AdminPlansPage() {
             min={1}
             step={1}
             value={form.price}
-            onChange={(event) => setForm((current) => ({ ...current, price: event.target.value }))}
+            onChange={(event) =>
+              setForm((current) => ({ ...current, price: event.target.value }))
+            }
             disabled={saving}
             required
           />
@@ -266,7 +271,10 @@ export default function AdminPlansPage() {
           />
 
           {formError ? (
-            <p className="bg-danger-bg text-danger sm:col-span-2 rounded-lg px-4 py-3 text-sm" role="alert">
+            <p
+              className="bg-danger-bg text-danger rounded-lg px-4 py-3 text-sm sm:col-span-2"
+              role="alert"
+            >
               {formError}
             </p>
           ) : null}
@@ -307,7 +315,9 @@ export default function AdminPlansPage() {
               <tbody className="divide-border divide-y">
                 {plans.map((plan) => (
                   <tr key={plan.id}>
-                    <td className="text-ink px-5 py-3 font-medium">{formatPlanTier(plan.tier)}</td>
+                    <td className="text-ink px-5 py-3 font-medium">
+                      {formatPlanTier(plan.tier)}
+                    </td>
                     <td className="text-ink-secondary px-5 py-3">₹{plan.price}</td>
                     <td className="text-ink-secondary px-5 py-3">
                       {plan.min_duration_weeks}–{plan.max_duration_weeks} weeks
