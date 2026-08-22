@@ -17,6 +17,14 @@ export interface StudentProfile {
   name: string;
   email: string | null;
   phone: string | null;
+  domain_id: string | null;
+  internship_plan_id: string | null;
+  chosen_duration_weeks: number | null;
+  college: string | null;
+  year_of_study: string | null;
+  payment_screenshot_url: string | null;
+  access_status: string;
+  access_granted_by: string | null;
   created_at: string;
   updated_at: string;
 }
