@@ -198,7 +198,39 @@
     animation: card-settle 0.7s ease-out both;
     animation-delay: var(--stagger-delay);
     border-radius: 1rem;
-    box-shadow: 0 12px 24px -8px color-mix(in srgb, var(--color-ink) 15%, transparent);
+    box-shadow:
+      0 3px 8px color-mix(in srgb, var(--color-ink) 14%, transparent),
+      0 16px 32px -10px color-mix(in srgb, var(--color-ink) 12%, transparent);
+  }
+
+  .hero-domain-card-surface {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.875rem;
+    box-shadow:
+      0 2px 5px color-mix(in srgb, var(--color-ink) 10%, transparent),
+      0 10px 22px -8px color-mix(in srgb, var(--color-ink) 8%, transparent);
+  }
+
+  .hero-domain-card-surface::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-surface) 55%, transparent) 0%,
+      transparent 48%
+    );
+    pointer-events: none;
+  }
+
+  .hero-domain-card-surface-dark::before {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-ink-on-dark) 14%, transparent) 0%,
+      transparent 50%
+    );
   }
 }
 
