@@ -52,7 +52,7 @@ const DOMAINS = [
 
 const STEPS = [
   {
-    title: "Sign up",
+    title: "Welcome Sign up",
     detail: "Create your student account with email or phone.",
   },
   {
