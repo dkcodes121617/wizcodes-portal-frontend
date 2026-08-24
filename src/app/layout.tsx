@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     default: "WizCodes Portal",
     template: "%s | WizCodes Portal",
   },
-  description: "WizCodes portal.",
+  description: "WizCodes company portal.",
   applicationName: "WizCodes Portal",
   robots: {
     // Keep previews out of search results; production is opted in explicitly.
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "WizCodes Portal",
     title: "WizCodes Portal",
-    description: "WizCodes portal.",
+    description: "WizCodes company portal.",
   },
 };
 
