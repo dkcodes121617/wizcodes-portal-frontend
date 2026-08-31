@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion, type HTMLMotionProps } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import type { ElementType, ReactNode } from "react";
 
 interface ScrollRevealProps {
@@ -17,20 +17,23 @@ export function ScrollReveal({
   as: Component = "div",
 }: ScrollRevealProps) {
   const reduceMotion = useReducedMotion();
-  const MotionComponent = motion.create(Component) as typeof motion.div;
+  const Static = Component as "div";
 
   if (reduceMotion) {
-    const Static = Component as "div";
     return <Static className={className}>{children}</Static>;
   }
 
-  const motionProps: HTMLMotionProps<"div"> = {
+  const motionProps = {
     className,
-    initial: { opacity: 0, y: 32 },
+    initial: { opacity: 1, y: 12 },
     whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, amount: 0.2, margin: "-60px" },
-    transition: { duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] },
+    viewport: { once: true, amount: 0.15 },
+    transition: { duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] as const },
   };
 
-  return <MotionComponent {...motionProps}>{children}</MotionComponent>;
+  if (Component === "li") {
+    return <motion.li {...motionProps}>{children}</motion.li>;
+  }
+
+  return <motion.div {...motionProps}>{children}</motion.div>;
 }
