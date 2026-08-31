@@ -244,7 +244,6 @@ export function MobileDevIcon({ idSuffix = "mobile", ...props }: DomainIconProps
   );
 }
 
-
 export type DomainIconId = "web" | "ai" | "mobile";
 
 export const DOMAIN_ICONS = {
