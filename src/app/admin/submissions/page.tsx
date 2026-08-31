@@ -74,6 +74,7 @@ function ReviewPanel({
           <p className="text-ink-muted text-xs font-medium tracking-wide uppercase">Task</p>
           <p className="text-ink mt-2 font-medium">{item.task.title}</p>
           <p className="text-ink-secondary mt-2 text-sm">{item.task.description}</p>
+          <p className="text-ink-muted mt-2 text-xs font-medium">Stack: {item.task.stack}</p>
         </section>
 
         <section>

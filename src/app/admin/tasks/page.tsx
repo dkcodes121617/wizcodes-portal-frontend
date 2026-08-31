@@ -25,7 +25,7 @@ interface TaskFormState {
   internship_plan_id: string;
   title: string;
   description: string;
-  github_link: string;
+  stack: string;
 }
 
 const EMPTY_FORM: TaskFormState = {
@@ -33,7 +33,7 @@ const EMPTY_FORM: TaskFormState = {
   internship_plan_id: "",
   title: "",
   description: "",
-  github_link: "",
+  stack: "",
 };
 
 function StatusBadge({ active }: { active: boolean }) {
@@ -237,7 +237,7 @@ export default function AdminTasksPage() {
       internship_plan_id: task.internship_plan_id,
       title: task.title,
       description: task.description,
-      github_link: task.github_link,
+      stack: task.stack,
     });
     setFormError(null);
   }
@@ -259,8 +259,8 @@ export default function AdminTasksPage() {
       setFormError("Description is required.");
       return null;
     }
-    if (!form.github_link.trim()) {
-      setFormError("GitHub link is required.");
+    if (!form.stack.trim()) {
+      setFormError("Stack is required.");
       return null;
     }
     return {
@@ -268,7 +268,7 @@ export default function AdminTasksPage() {
       domain_id: form.domain_id.trim(),
       title: form.title.trim(),
       description: form.description.trim(),
-      github_link: form.github_link.trim(),
+      stack: form.stack.trim(),
     };
   }
 
@@ -432,13 +432,12 @@ export default function AdminTasksPage() {
           />
 
           <Input
-            label="GitHub link"
-            name="github_link"
-            type="url"
-            placeholder="https://github.com/org/repo"
-            value={form.github_link}
+            label="Stack / technologies"
+            name="stack"
+            placeholder="e.g. React, Node.js, PostgreSQL"
+            value={form.stack}
             onChange={(event) =>
-              setForm((current) => ({ ...current, github_link: event.target.value }))
+              setForm((current) => ({ ...current, stack: event.target.value }))
             }
             disabled={saving}
             required
@@ -490,14 +489,7 @@ export default function AdminTasksPage() {
                   <tr key={task.id}>
                     <td className="px-5 py-3">
                       <p className="text-ink font-medium">{task.title}</p>
-                      <a
-                        href={task.github_link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-brand hover:text-brand-strong mt-1 inline-block text-xs"
-                      >
-                        Repo link
-                      </a>
+                      <p className="text-ink-muted mt-1 text-xs">{task.stack}</p>
                     </td>
                     <td className="text-ink-secondary px-5 py-3" title={task.domain_id}>
                       {domainLabelById.get(task.domain_id) ?? shortenId(task.domain_id)}

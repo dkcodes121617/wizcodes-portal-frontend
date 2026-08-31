@@ -91,14 +91,8 @@ function TaskCard({
         {assignment.task.description}
       </p>
 
-      <a
-        href={assignment.task.github_link}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-brand hover:text-brand-strong mt-3 inline-block text-sm font-medium"
-      >
-        View task repository →
-      </a>
+      <p className="text-ink-muted mt-3 text-xs font-medium tracking-wide uppercase">Stack</p>
+      <p className="text-ink mt-1 text-sm">{assignment.task.stack}</p>
 
       {status === "submitted" ? (
         <p className="text-ink-secondary mt-4 text-sm">Submitted — waiting for review.</p>
@@ -133,7 +127,7 @@ function TaskCard({
             label={assignment.submission_link ? "Update submission link" : "Submission link"}
             name={`submission-${assignment.id}`}
             type="url"
-            placeholder="https://github.com/you/repo or PR URL"
+            placeholder="https://your-project.example.com or deployment URL"
             value={link}
             onChange={(event) => {
               setLink(event.target.value);

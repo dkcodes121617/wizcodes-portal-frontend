@@ -11,7 +11,7 @@ export type AssignmentStatus = "assigned" | "in_progress" | "submitted" | "compl
 export interface AssignedTaskDetails {
   title: string;
   description: string;
-  github_link: string;
+  stack: string;
 }
 
 export interface StudentTaskAssignment {
@@ -84,7 +84,7 @@ export function validateSubmissionLink(value: string): string | null {
     }
     return null;
   } catch {
-    return "Enter a valid URL (e.g. https://github.com/you/repo).";
+    return "Enter a valid URL (e.g. https://your-project.example.com).";
   }
 }
 

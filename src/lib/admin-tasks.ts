@@ -10,7 +10,7 @@ export interface AdminTask {
   internship_plan_id: string;
   title: string;
   description: string;
-  github_link: string;
+  stack: string;
   is_active: boolean;
   created_at: string;
   updated_at: string;
@@ -21,7 +21,7 @@ export interface AdminTaskCreateBody {
   internship_plan_id: string;
   title: string;
   description: string;
-  github_link: string;
+  stack: string;
 }
 
 export interface AdminTaskUpdateBody {
@@ -29,7 +29,7 @@ export interface AdminTaskUpdateBody {
   internship_plan_id?: string;
   title?: string;
   description?: string;
-  github_link?: string;
+  stack?: string;
   is_active?: boolean;
 }
 

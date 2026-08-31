@@ -336,6 +336,9 @@ export function StudentDetailPanel({
                           <span className="text-ink-secondary mt-1 block text-xs">
                             {task.description}
                           </span>
+                          <span className="text-brand mt-1.5 block text-xs font-medium">
+                            Stack: {task.stack}
+                          </span>
                         </span>
                       </label>
                     </li>

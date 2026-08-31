@@ -70,7 +70,7 @@ const STEPS = [
   },
   {
     title: "Get access & start tasks",
-    detail: "Receive your GitHub repo link and begin assigned work.",
+    detail: "Receive your assigned tasks and begin building.",
   },
   {
     title: "Earn your certificate",
@@ -443,8 +443,8 @@ export default function Home() {
           </h1>
 
           <p className="text-ink-secondary mx-auto mt-6 max-w-lg text-base leading-relaxed sm:text-lg">
-            Pick a domain, get GitHub-based tasks from our team, and finish with an offer letter
-            and certificate you can show employers.
+            Pick a domain, get real tasks from our team with clear instructions, and finish
+            with an offer letter and certificate you can show employers.
           </p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
