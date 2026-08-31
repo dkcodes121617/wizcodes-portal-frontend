@@ -7,12 +7,12 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { ApiError } from "@/lib/api";
 import { getAdminToken } from "@/lib/admin-auth";
+import { fetchActiveDomains, type DomainOption } from "@/lib/enrollment";
 import { fetchAdminPlans, formatPlanTier, type InternshipPlan } from "@/lib/admin-plans";
 import {
   createAdminTask,
   deactivateAdminTask,
   fetchAdminTasks,
-  isUuid,
   shortenId,
   updateAdminTask,
   type AdminTask,
@@ -71,8 +71,10 @@ function Textarea({
 
 export default function AdminTasksPage() {
   const [plans, setPlans] = useState<InternshipPlan[]>([]);
+  const [domains, setDomains] = useState<DomainOption[]>([]);
   const [tasks, setTasks] = useState<AdminTask[]>([]);
   const [loadingPlans, setLoadingPlans] = useState(true);
+  const [loadingDomains, setLoadingDomains] = useState(true);
   const [loadingTasks, setLoadingTasks] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [filterPlanId, setFilterPlanId] = useState("");
@@ -89,9 +91,9 @@ export default function AdminTasksPage() {
     [plans],
   );
 
-  const knownDomainIds = useMemo(
-    () => [...new Set(tasks.map((task) => task.domain_id))].sort(),
-    [tasks],
+  const domainLabelById = useMemo(
+    () => new Map(domains.map((domain) => [domain.id, domain.name])),
+    [domains],
   );
 
   async function reloadTasks(planId: string, domainId: string) {
@@ -143,6 +145,36 @@ export default function AdminTasksPage() {
         }
       } finally {
         if (!cancelled) setLoadingPlans(false);
+      }
+    }
+
+    void run();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function run() {
+      setLoadingDomains(true);
+      try {
+        const data = await fetchActiveDomains();
+        if (cancelled) return;
+        const activeDomains = data.filter((domain) => domain.is_active);
+        setDomains(activeDomains);
+        setForm((current) => ({
+          ...current,
+          domain_id: current.domain_id || activeDomains[0]?.id || "",
+        }));
+      } catch (cause) {
+        if (!cancelled) {
+          setError(cause instanceof ApiError ? cause.message : "Could not load domains.");
+        }
+      } finally {
+        if (!cancelled) setLoadingDomains(false);
       }
     }
 
@@ -211,8 +243,8 @@ export default function AdminTasksPage() {
   }
 
   function validateForm(): TaskFormState | null {
-    if (!isUuid(form.domain_id)) {
-      setFormError("Domain ID must be a valid UUID (no domain list API exists yet).");
+    if (!form.domain_id) {
+      setFormError("Select a domain.");
       return null;
     }
     if (!form.internship_plan_id) {
@@ -318,14 +350,20 @@ export default function AdminTasksPage() {
             ))}
           </Select>
 
-          <Input
-            label="Domain ID (optional filter)"
+          <Select
+            label="Domain (optional filter)"
             name="filter_domain"
-            placeholder="UUID — leave blank for all domains in this plan"
             value={filterDomainId}
             onChange={(event) => setFilterDomainId(event.target.value)}
-            disabled={!filterPlanId}
-          />
+            disabled={!filterPlanId || loadingDomains}
+          >
+            <option value="">All domains</option>
+            {domains.map((domain) => (
+              <option key={domain.id} value={domain.id}>
+                {domain.name}
+              </option>
+            ))}
+          </Select>
         </div>
       </section>
 
@@ -333,36 +371,25 @@ export default function AdminTasksPage() {
         <h2 className="text-ink text-sm font-semibold">
           {formMode === "create" ? "Create task" : "Edit task"}
         </h2>
-        <p className="text-warning bg-warning-bg mt-2 rounded-lg px-4 py-3 text-sm">
-          There is no admin domain list API yet — enter the domain UUID directly. A dedicated
-          domains admin router is needed before domain names can be selected from a dropdown.
-        </p>
-
         <form className="mt-4 space-y-4" onSubmit={(event) => void handleSubmit(event)}>
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-1.5">
-              <label htmlFor="domain_id" className="text-ink text-sm font-medium">
-                Domain ID
-              </label>
-              <input
-                id="domain_id"
-                name="domain_id"
-                list="known-domain-ids"
-                className="border-border bg-surface text-ink placeholder:text-ink-muted focus:border-brand w-full rounded-lg border px-4 py-2.5 text-sm transition-colors outline-none focus:ring-2 focus:ring-[color-mix(in_srgb,var(--color-brand)_25%,transparent)]"
-                placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                value={form.domain_id}
-                onChange={(event) =>
-                  setForm((current) => ({ ...current, domain_id: event.target.value }))
-                }
-                disabled={saving}
-                required
-              />
-              <datalist id="known-domain-ids">
-                {knownDomainIds.map((domainId) => (
-                  <option key={domainId} value={domainId} />
-                ))}
-              </datalist>
-            </div>
+            <Select
+              label="Domain"
+              name="domain_id"
+              value={form.domain_id}
+              onChange={(event) =>
+                setForm((current) => ({ ...current, domain_id: event.target.value }))
+              }
+              disabled={saving || loadingDomains || domains.length === 0}
+              placeholder="Select a domain"
+              required
+            >
+              {domains.map((domain) => (
+                <option key={domain.id} value={domain.id}>
+                  {domain.name}
+                </option>
+              ))}
+            </Select>
 
             <Select
               label="Internship plan"
@@ -472,11 +499,8 @@ export default function AdminTasksPage() {
                         Repo link
                       </a>
                     </td>
-                    <td
-                      className="text-ink-secondary px-5 py-3 font-mono text-xs"
-                      title={task.domain_id}
-                    >
-                      {shortenId(task.domain_id)}
+                    <td className="text-ink-secondary px-5 py-3" title={task.domain_id}>
+                      {domainLabelById.get(task.domain_id) ?? shortenId(task.domain_id)}
                     </td>
                     <td className="text-ink-secondary px-5 py-3">
                       {planLabelById.get(task.internship_plan_id) ?? "—"}

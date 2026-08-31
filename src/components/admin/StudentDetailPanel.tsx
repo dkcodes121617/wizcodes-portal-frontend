@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/Button";
+import { StudentTaskProgress } from "@/components/admin/StudentTaskProgress";
 import { ApiError } from "@/lib/api";
 import { getAdminToken } from "@/lib/admin-auth";
 import { formatPlanTier, type InternshipPlan } from "@/lib/admin-plans";
@@ -16,11 +17,7 @@ import {
 } from "@/lib/admin-students";
 import { fetchPremiumAdminTasks, shortenId, type AdminTask } from "@/lib/admin-tasks";
 import { resolvePaymentScreenshotUrl } from "@/lib/payment";
-import {
-  formatAssignmentStatus,
-  type AssignmentStatus,
-  type StudentTaskAssignment,
-} from "@/lib/tasks";
+import { type StudentTaskAssignment } from "@/lib/tasks";
 
 const PREMIUM_TIER = "premium_999";
 const BASIC_TIER = "basic_299";
@@ -29,6 +26,7 @@ interface StudentDetailPanelProps {
   student: AdminStudent;
   plans: InternshipPlan[];
   onStudentUpdated: (student: AdminStudent) => void;
+  onAssignmentsUpdated?: (studentId: string, assignments: StudentTaskAssignment[]) => void;
   onClose: () => void;
 }
 
@@ -49,6 +47,7 @@ export function StudentDetailPanel({
   student,
   plans,
   onStudentUpdated,
+  onAssignmentsUpdated,
   onClose,
 }: StudentDetailPanelProps) {
   const [assignments, setAssignments] = useState<StudentTaskAssignment[]>([]);
@@ -93,6 +92,7 @@ export function StudentDetailPanel({
         const assignmentList = await fetchStudentAssignments(token, studentId);
         if (cancelled) return;
         setAssignments(assignmentList);
+        onAssignmentsUpdated?.(studentId, assignmentList);
 
         if (studentIsPremium && domainId) {
           const tasks = await fetchPremiumAdminTasks(token, domainId);
@@ -151,6 +151,7 @@ export function StudentDetailPanel({
     try {
       const result = await assignTasksToStudent(token, student.id, selectedTaskIds);
       setAssignments(result.assignments);
+      onAssignmentsUpdated?.(student.id, result.assignments);
       setSelectedTaskIds([]);
       setAssignSuccess(
         `Assigned ${result.newly_created} task(s)` +
@@ -277,33 +278,18 @@ export function StudentDetailPanel({
           </p>
         ) : null}
 
+        {granted ? (
+          <StudentTaskProgress assignments={assignments} loading={loadingDetail} />
+        ) : null}
+
         {granted && basic ? (
           <section>
             <p className="text-ink-muted text-xs font-medium tracking-wide uppercase">
-              Auto-assigned tasks (Basic)
+              Basic plan notes
             </p>
             <p className="text-ink-secondary mt-2 text-sm">
               Basic plans are assigned automatically when access is granted.
             </p>
-            {loadingDetail ? (
-              <p className="text-ink-secondary mt-3 text-sm">Loading assignments…</p>
-            ) : assignments.length === 0 ? (
-              <p className="text-ink-secondary mt-3 text-sm">No tasks assigned yet.</p>
-            ) : (
-              <ul className="mt-3 space-y-2">
-                {assignments.map((assignment) => (
-                  <li
-                    key={assignment.id}
-                    className="border-border rounded-lg border px-4 py-3 text-sm"
-                  >
-                    <p className="text-ink font-medium">{assignment.task.title}</p>
-                    <p className="text-ink-muted mt-1 text-xs">
-                      {formatAssignmentStatus(assignment.status as AssignmentStatus)}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            )}
           </section>
         ) : null}
 
@@ -374,27 +360,6 @@ export function StudentDetailPanel({
               >
                 {assignSuccess}
               </p>
-            ) : null}
-
-            {assignments.length > 0 ? (
-              <div className="mt-6">
-                <p className="text-ink-muted text-xs font-medium tracking-wide uppercase">
-                  Current assignments
-                </p>
-                <ul className="mt-2 space-y-2">
-                  {assignments.map((assignment) => (
-                    <li
-                      key={assignment.id}
-                      className="border-border rounded-lg border px-4 py-3 text-sm"
-                    >
-                      <p className="text-ink font-medium">{assignment.task.title}</p>
-                      <p className="text-ink-muted mt-1 text-xs">
-                        {formatAssignmentStatus(assignment.status as AssignmentStatus)}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
             ) : null}
           </section>
         ) : null}

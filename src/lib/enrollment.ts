@@ -1,9 +1,7 @@
 /**
  * Enrollment API types and helpers (B2).
  *
- * Domain list expects `GET /api/v1/domains` (public, active domains) — this
- * endpoint is not yet implemented on the backend; the enroll page surfaces
- * that gap instead of hardcoding domains.
+ * Domain list uses `GET /api/v1/domains` (public, active domains).
  */
 
 import { ApiError, api } from "@/lib/api";

@@ -9,11 +9,17 @@ import { getAdminToken } from "@/lib/admin-auth";
 import { fetchAdminPlans, formatPlanTier, type InternshipPlan } from "@/lib/admin-plans";
 import {
   fetchAdminStudents,
+  fetchStudentAssignments,
   hasPaymentScreenshot,
   type AdminStudent,
   type StudentAccessStatus,
 } from "@/lib/admin-students";
 import { shortenId } from "@/lib/admin-tasks";
+import {
+  formatProgressLabel,
+  summarizeTaskProgress,
+  type StudentTaskAssignment,
+} from "@/lib/tasks";
 
 type AccessFilter = "pending" | "granted";
 
@@ -27,9 +33,36 @@ function PaymentBadge({ uploaded }: { uploaded: boolean }) {
   );
 }
 
+function ProgressBadge({ assignments }: { assignments: StudentTaskAssignment[] | null }) {
+  if (assignments === null) {
+    return <span className="text-ink-muted text-xs">…</span>;
+  }
+
+  const summary = summarizeTaskProgress(assignments);
+
+  if (summary.total === 0) {
+    return <span className="text-ink-muted text-xs">No tasks</span>;
+  }
+
+  const tone = summary.readyForCertificate
+    ? "bg-success-bg text-success"
+    : summary.completionPercent > 0 || summary.submitted > 0
+      ? "bg-warning-bg text-warning"
+      : "bg-surface-raised text-ink-muted";
+
+  return (
+    <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${tone}`}>
+      {formatProgressLabel(summary)}
+    </span>
+  );
+}
+
 export default function AdminStudentsPage() {
   const [students, setStudents] = useState<AdminStudent[]>([]);
   const [plans, setPlans] = useState<InternshipPlan[]>([]);
+  const [assignmentMap, setAssignmentMap] = useState<
+    Record<string, StudentTaskAssignment[] | null>
+  >({});
   const [accessFilter, setAccessFilter] = useState<AccessFilter>("pending");
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -80,6 +113,24 @@ export default function AdminStudentsPage() {
           setSelectedStudentId((current) =>
             current && data.some((student) => student.id === current) ? current : null,
           );
+
+          if (accessFilter === "granted" && token) {
+            const progressEntries = await Promise.all(
+              data.map(async (student) => {
+                try {
+                  const assignments = await fetchStudentAssignments(token, student.id);
+                  return [student.id, assignments] as const;
+                } catch {
+                  return [student.id, []] as const;
+                }
+              }),
+            );
+            if (!cancelled) {
+              setAssignmentMap(Object.fromEntries(progressEntries));
+            }
+          } else if (!cancelled) {
+            setAssignmentMap({});
+          }
         }
       } catch (cause) {
         if (!cancelled) {
@@ -106,6 +157,10 @@ export default function AdminStudentsPage() {
     }
   }
 
+  function handleAssignmentsUpdated(studentId: string, assignments: StudentTaskAssignment[]) {
+    setAssignmentMap((current) => ({ ...current, [studentId]: assignments }));
+  }
+
   return (
     <div className="mx-auto flex h-[calc(100vh-4rem)] max-w-7xl gap-0">
       <div className="flex min-w-0 flex-1 flex-col">
@@ -113,7 +168,7 @@ export default function AdminStudentsPage() {
           <div>
             <h1 className="text-ink text-2xl font-semibold tracking-tight">Students</h1>
             <p className="text-ink-secondary mt-1 text-sm">
-              Review pending payments and manage Premium task assignment.
+              Review payments, track internship progress, and manage Premium task assignment.
             </p>
           </div>
 
@@ -156,7 +211,9 @@ export default function AdminStudentsPage() {
                     <th className="px-5 py-3 font-medium">Domain</th>
                     <th className="px-5 py-3 font-medium">Plan</th>
                     <th className="px-5 py-3 font-medium">Duration</th>
-                    <th className="px-5 py-3 font-medium">Payment</th>
+                    <th className="px-5 py-3 font-medium">
+                      {accessFilter === "granted" ? "Progress" : "Payment"}
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-border divide-y">
@@ -186,7 +243,11 @@ export default function AdminStudentsPage() {
                             : "—"}
                         </td>
                         <td className="px-5 py-3">
-                          <PaymentBadge uploaded={hasPaymentScreenshot(student)} />
+                          {accessFilter === "granted" ? (
+                            <ProgressBadge assignments={assignmentMap[student.id] ?? null} />
+                          ) : (
+                            <PaymentBadge uploaded={hasPaymentScreenshot(student)} />
+                          )}
                         </td>
                       </tr>
                     );
@@ -204,6 +265,7 @@ export default function AdminStudentsPage() {
           student={selectedStudent}
           plans={plans}
           onStudentUpdated={handleStudentUpdated}
+          onAssignmentsUpdated={handleAssignmentsUpdated}
           onClose={() => setSelectedStudentId(null)}
         />
       ) : null}

@@ -87,3 +87,77 @@ export function validateSubmissionLink(value: string): string | null {
     return "Enter a valid URL (e.g. https://github.com/you/repo).";
   }
 }
+
+export interface TaskProgressSummary {
+  total: number;
+  completed: number;
+  submitted: number;
+  inProgress: number;
+  assigned: number;
+  /** Percent of tasks marked completed by admin — use for certificate readiness. */
+  completionPercent: number;
+  /** Percent of tasks submitted or completed — student's handed-in work. */
+  submissionPercent: number;
+  readyForCertificate: boolean;
+}
+
+export function summarizeTaskProgress(
+  assignments: StudentTaskAssignment[],
+): TaskProgressSummary {
+  const total = assignments.length;
+  if (total === 0) {
+    return {
+      total: 0,
+      completed: 0,
+      submitted: 0,
+      inProgress: 0,
+      assigned: 0,
+      completionPercent: 0,
+      submissionPercent: 0,
+      readyForCertificate: false,
+    };
+  }
+
+  let completed = 0;
+  let submitted = 0;
+  let inProgress = 0;
+  let assigned = 0;
+
+  for (const assignment of assignments) {
+    switch (assignment.status) {
+      case "completed":
+        completed += 1;
+        break;
+      case "submitted":
+        submitted += 1;
+        break;
+      case "in_progress":
+        inProgress += 1;
+        break;
+      case "assigned":
+      default:
+        assigned += 1;
+        break;
+    }
+  }
+
+  const completionPercent = Math.round((completed / total) * 100);
+  const submissionPercent = Math.round(((completed + submitted) / total) * 100);
+
+  return {
+    total,
+    completed,
+    submitted,
+    inProgress,
+    assigned,
+    completionPercent,
+    submissionPercent,
+    readyForCertificate: completed === total,
+  };
+}
+
+export function formatProgressLabel(summary: TaskProgressSummary): string {
+  if (summary.total === 0) return "No tasks";
+  if (summary.readyForCertificate) return "100% — ready for certificate";
+  return `${summary.completionPercent}% complete`;
+}
