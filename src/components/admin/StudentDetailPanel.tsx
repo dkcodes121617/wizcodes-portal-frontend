@@ -210,7 +210,10 @@ export function StudentDetailPanel({
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-ink-secondary">Domain</dt>
-              <dd className="text-ink text-right font-medium" title={student.domain_id ?? undefined}>
+              <dd
+                className="text-ink text-right font-medium"
+                title={student.domain_id ?? undefined}
+              >
                 {domainLabel}
               </dd>
             </div>
