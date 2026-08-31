@@ -21,7 +21,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lockfile:check": "node scripts/check-lockfile.mjs",
-    "prepare": "husky",
+    "lockfile:sync": "npx -y npm@10.9.2 install",
+    "prepare": "node scripts/prepare.mjs",
     "verify": "npm run lockfile:check && npm run lint && npm run typecheck && npm run build"
   },
   "dependencies": {
