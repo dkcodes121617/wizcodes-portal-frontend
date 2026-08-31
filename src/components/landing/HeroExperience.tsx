@@ -7,6 +7,7 @@ import {
   useReducedMotion,
   useSpring,
 } from "framer-motion";
+import { FloatingParticles } from "@/components/landing/FloatingParticles";
 import { useCallback, useRef, type ReactNode } from "react";
 
 interface HeroExperienceProps {
@@ -68,6 +69,7 @@ export function HeroExperience({ children, cards }: HeroExperienceProps) {
       <div className="hero-aurora hero-aurora-b" aria-hidden />
       <div className="hero-aurora hero-aurora-c" aria-hidden />
       <div className="hero-grid" aria-hidden />
+      <FloatingParticles />
 
       {!reduceMotion ? (
         <motion.div

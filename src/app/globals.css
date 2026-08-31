@@ -124,6 +124,10 @@
       opacity: 1 !important;
       transform: rotate(var(--card-rotate, 0deg)) !important;
     }
+
+    .hero-domain-card-surface {
+      animation: none !important;
+    }
   }
 }
 
@@ -281,6 +285,19 @@
     box-shadow:
       0 2px 5px color-mix(in srgb, var(--color-ink) 10%, transparent),
       0 10px 22px -8px color-mix(in srgb, var(--color-ink) 8%, transparent);
+    animation: hero-card-float 5s ease-in-out infinite;
+  }
+
+  .card-tilt-1 .hero-domain-card-surface {
+    animation-delay: 0s;
+  }
+
+  .card-tilt-2 .hero-domain-card-surface {
+    animation-delay: 0.6s;
+  }
+
+  .card-tilt-3 .hero-domain-card-surface {
+    animation-delay: 1.2s;
   }
 
   .hero-domain-card-surface::before {
@@ -453,6 +470,130 @@
       0 18px 40px -18px color-mix(in srgb, var(--color-brand) 35%, transparent),
       0 8px 20px -12px color-mix(in srgb, var(--color-ink) 12%, transparent);
   }
+
+  /* Glass nav */
+  .glass-nav {
+    background-color: color-mix(in srgb, var(--color-canvas) 82%, transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  /* Hero badge */
+  .hero-badge {
+    border: 1px solid color-mix(in srgb, var(--color-brand) 22%, transparent);
+    box-shadow: 0 4px 20px -8px color-mix(in srgb, var(--color-brand) 30%, transparent);
+  }
+
+  .hero-badge-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background-color: var(--color-success);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-success) 45%, transparent);
+    animation: badge-pulse 2s ease-in-out infinite;
+  }
+
+  /* Floating particles */
+  .hero-particle {
+    position: absolute;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--color-brand) 55%, transparent);
+    opacity: 0.35;
+    animation: particle-float var(--particle-duration, 10s) ease-in-out infinite;
+    animation-delay: var(--particle-delay, 0s);
+  }
+
+  /* Stats strip */
+  .stats-strip {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-surface) 90%, var(--color-baby-wash)) 0%,
+      var(--color-surface) 100%
+    );
+  }
+
+  /* Domain bento */
+  .domain-bento-card {
+    box-shadow:
+      0 1px 2px color-mix(in srgb, var(--color-ink) 6%, transparent),
+      0 8px 24px -12px color-mix(in srgb, var(--color-brand) 18%, transparent);
+    transition:
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.35s ease,
+      border-color 0.25s ease;
+  }
+
+  .domain-bento-card:hover {
+    border-color: color-mix(in srgb, var(--color-brand) 40%, var(--color-border));
+    box-shadow:
+      0 12px 32px -14px color-mix(in srgb, var(--color-brand) 35%, transparent),
+      0 4px 12px -6px color-mix(in srgb, var(--color-ink) 10%, transparent);
+  }
+
+  .domain-bento-glow {
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--color-baby) 50%, transparent) 0%,
+      transparent 70%
+    );
+  }
+
+  .domain-bento-icon {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* Premium pricing */
+  .pricing-card-premium {
+    background: linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--color-baby-wash) 80%, var(--color-surface)) 0%,
+      var(--color-surface) 55%
+    );
+  }
+
+  .popular-badge {
+    box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--color-brand) 55%, transparent);
+  }
+
+  /* Final CTA */
+  .final-cta-section {
+    background-color: var(--color-spotlight);
+    color: var(--color-ink-on-dark);
+  }
+
+  .final-cta-aurora {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        60% 80% at 20% 100%,
+        color-mix(in srgb, var(--color-brand) 35%, transparent),
+        transparent 60%
+      ),
+      radial-gradient(
+        50% 70% at 80% 0%,
+        color-mix(in srgb, var(--color-baby) 25%, transparent),
+        transparent 55%
+      );
+    opacity: 0.9;
+    pointer-events: none;
+  }
+
+  .headline-shimmer-dark {
+    background-image: linear-gradient(
+      110deg,
+      var(--color-baby) 0%,
+      var(--color-ink-on-dark) 40%,
+      var(--color-baby) 70%,
+      var(--color-wordmark-codes-dark) 100%
+    );
+    background-size: 220% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: headline-shimmer 6s linear infinite;
+  }
 }
 
 @keyframes card-settle {
@@ -543,5 +684,40 @@
 
   to {
     transform: translateX(-50%);
+  }
+}
+
+@keyframes badge-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-success) 40%, transparent);
+  }
+
+  50% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-success) 0%, transparent);
+  }
+}
+
+@keyframes particle-float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.25;
+  }
+
+  50% {
+    transform: translateY(-18px) scale(1.15);
+    opacity: 0.55;
+  }
+}
+
+@keyframes hero-card-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
   }
 }
