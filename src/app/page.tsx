@@ -62,17 +62,17 @@ export default function Home() {
         <HeroExperience>
           <HeroBadge />
 
-          <h1 className="display-heading mt-5">
+          <h1 className="display-heading hero-heading mt-5">
             Learn by building.
             <span className="text-brand block sm:inline"> Graduate with proof.</span>
           </h1>
 
-          <p className="text-ink-secondary mt-6 max-w-xl text-base leading-relaxed sm:text-[1.0625rem] lg:mx-0">
+          <p className="text-ink-secondary mx-auto mt-6 max-w-2xl text-base leading-relaxed sm:text-[1.0625rem]">
             WizCodes gives students structured internship tasks across Web, AI, and Mobile —
             with certificates employers recognize. Plans start at ₹299.
           </p>
 
-          <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row lg:items-start">
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link href="/signup" className="btn-primary btn-primary-lg">
               Start internship
             </Link>

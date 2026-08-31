@@ -719,11 +719,22 @@
     position: absolute;
     inset: 0;
     background: radial-gradient(
-      70% 55% at 72% 18%,
+      60% 50% at 50% 20%,
       color-mix(in srgb, var(--color-baby-wash) 85%, transparent),
       transparent 70%
     );
     pointer-events: none;
+  }
+
+  .hero-heading {
+    margin-inline: auto;
+    max-width: 16ch;
+  }
+
+  @media (min-width: 640px) {
+    .hero-heading {
+      max-width: none;
+    }
   }
 
   .hero-eyebrow {
@@ -881,12 +892,6 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.5rem 1.25rem;
-  }
-
-  @media (min-width: 1024px) {
-    .trust-bar-list {
-      justify-content: flex-start;
-    }
   }
 
   .trust-bar-item {
