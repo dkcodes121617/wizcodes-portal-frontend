@@ -509,7 +509,7 @@ export default function Home() {
                   price="₹999"
                   duration="Up to 3 months, you choose"
                   features={[
-                    "Regular 1:1 Google Meet sessions",
+                    "1:1 Assistance ",
                     "Hand-picked substantial tasks from our team",
                     "Offer letter + certificate on completion",
                   ]}
