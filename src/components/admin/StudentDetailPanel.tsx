@@ -15,7 +15,8 @@ import {
   isAccessGranted,
   type AdminStudent,
 } from "@/lib/admin-students";
-import { fetchPremiumAdminTasks, shortenId, type AdminTask } from "@/lib/admin-tasks";
+import { fetchPremiumAdminTasks, type AdminTask } from "@/lib/admin-tasks";
+import { type DomainOption } from "@/lib/enrollment";
 import { resolvePaymentScreenshotUrl } from "@/lib/payment";
 import { type StudentTaskAssignment } from "@/lib/tasks";
 
@@ -25,6 +26,7 @@ const BASIC_TIER = "basic_299";
 interface StudentDetailPanelProps {
   student: AdminStudent;
   plans: InternshipPlan[];
+  domains: DomainOption[];
   onStudentUpdated: (student: AdminStudent) => void;
   onAssignmentsUpdated?: (studentId: string, assignments: StudentTaskAssignment[]) => void;
   onClose: () => void;
@@ -46,6 +48,7 @@ function isBasicStudent(student: AdminStudent, plans: InternshipPlan[]): boolean
 export function StudentDetailPanel({
   student,
   plans,
+  domains,
   onStudentUpdated,
   onAssignmentsUpdated,
   onClose,
@@ -67,6 +70,9 @@ export function StudentDetailPanel({
   const screenshotUrl = resolvePaymentScreenshotUrl(student.payment_screenshot_url);
   const planLabel = student.internship_plan_id
     ? formatPlanTier(planTierForStudent(student, plans) ?? "")
+    : "—";
+  const domainLabel = student.domain_id
+    ? (domains.find((domain) => domain.id === student.domain_id)?.name ?? "Unknown domain")
     : "—";
 
   const assignedTaskIds = useMemo(
@@ -204,8 +210,8 @@ export function StudentDetailPanel({
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-ink-secondary">Domain</dt>
-              <dd className="text-ink font-mono text-xs" title={student.domain_id ?? undefined}>
-                {student.domain_id ? shortenId(student.domain_id) : "—"}
+              <dd className="text-ink text-right font-medium" title={student.domain_id ?? undefined}>
+                {domainLabel}
               </dd>
             </div>
             <div className="flex justify-between gap-4">

@@ -14,7 +14,7 @@ import {
   type AdminStudent,
   type StudentAccessStatus,
 } from "@/lib/admin-students";
-import { shortenId } from "@/lib/admin-tasks";
+import { fetchActiveDomains, type DomainOption } from "@/lib/enrollment";
 import {
   formatProgressLabel,
   summarizeTaskProgress,
@@ -60,6 +60,7 @@ function ProgressBadge({ assignments }: { assignments: StudentTaskAssignment[] |
 export default function AdminStudentsPage() {
   const [students, setStudents] = useState<AdminStudent[]>([]);
   const [plans, setPlans] = useState<InternshipPlan[]>([]);
+  const [domains, setDomains] = useState<DomainOption[]>([]);
   const [assignmentMap, setAssignmentMap] = useState<
     Record<string, StudentTaskAssignment[] | null>
   >({});
@@ -73,24 +74,35 @@ export default function AdminStudentsPage() {
     [plans],
   );
 
+  const domainLabelById = useMemo(
+    () => new Map(domains.map((domain) => [domain.id, domain.name])),
+    [domains],
+  );
+
   const selectedStudent = students.find((student) => student.id === selectedStudentId) ?? null;
 
   useEffect(() => {
     let cancelled = false;
 
-    async function loadPlans() {
+    async function loadPlansAndDomains() {
       const token = getAdminToken();
       if (!token) return;
 
       try {
-        const data = await fetchAdminPlans(token);
-        if (!cancelled) setPlans(data);
+        const [plansData, domainsData] = await Promise.all([
+          fetchAdminPlans(token),
+          fetchActiveDomains(),
+        ]);
+        if (!cancelled) {
+          setPlans(plansData);
+          setDomains(domainsData);
+        }
       } catch {
-        // Plans are only used for labels; list still works without them.
+        // Labels only; list still works without them.
       }
     }
 
-    void loadPlans();
+    void loadPlansAndDomains();
 
     return () => {
       cancelled = true;
@@ -227,10 +239,12 @@ export default function AdminStudentsPage() {
                       >
                         <td className="text-ink px-5 py-3 font-medium">{student.name}</td>
                         <td
-                          className="text-ink-secondary px-5 py-3 font-mono text-xs"
+                          className="text-ink-secondary px-5 py-3"
                           title={student.domain_id ?? undefined}
                         >
-                          {student.domain_id ? shortenId(student.domain_id) : "—"}
+                          {student.domain_id
+                            ? (domainLabelById.get(student.domain_id) ?? "Unknown domain")
+                            : "—"}
                         </td>
                         <td className="text-ink-secondary px-5 py-3">
                           {student.internship_plan_id
@@ -264,6 +278,7 @@ export default function AdminStudentsPage() {
           key={`${selectedStudent.id}-${selectedStudent.access_status}-${selectedStudent.updated_at}`}
           student={selectedStudent}
           plans={plans}
+          domains={domains}
           onStudentUpdated={handleStudentUpdated}
           onAssignmentsUpdated={handleAssignmentsUpdated}
           onClose={() => setSelectedStudentId(null)}

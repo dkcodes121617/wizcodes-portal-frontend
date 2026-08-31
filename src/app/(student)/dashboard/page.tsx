@@ -84,11 +84,6 @@ export default function DashboardPage() {
     };
   }, [router]);
 
-  function handleLogout() {
-    clearToken();
-    router.push("/login");
-  }
-
   if (loading) {
     return (
       <main className="flex flex-1 items-center justify-center px-6 py-16">
@@ -159,12 +154,6 @@ export default function DashboardPage() {
             <StudentTaskList />
           </>
         ) : null}
-
-        <div className="mt-8 text-center">
-          <Button variant="secondary" onClick={handleLogout}>
-            Log out
-          </Button>
-        </div>
       </div>
     </main>
   );

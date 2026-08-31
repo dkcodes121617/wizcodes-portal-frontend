@@ -15,6 +15,7 @@ import {
 
 const NAV_ITEMS = [
   { href: "/admin/students", label: "Students" },
+  { href: "/admin/notifications", label: "Notifications" },
   { href: "/admin/submissions", label: "Submissions" },
   { href: "/admin/plans", label: "Plans" },
   { href: "/admin/tasks", label: "Tasks" },

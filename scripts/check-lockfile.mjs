@@ -16,7 +16,9 @@ try {
   });
 } catch {
   console.error("");
-  console.error("npm ci failed with npm 10. package-lock.json is out of sync with package.json.");
+  console.error(
+    "npm ci failed with npm 10. package-lock.json is out of sync with package.json.",
+  );
   console.error("Run: npm run lockfile:sync");
   process.exit(1);
 }
