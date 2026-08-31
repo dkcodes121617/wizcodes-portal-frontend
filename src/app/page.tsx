@@ -1,3 +1,8 @@
+import { DomainListItemMotion } from "@/components/landing/DomainListItemMotion";
+import { HeroExperience } from "@/components/landing/HeroExperience";
+import { ScrollProgress } from "@/components/landing/ScrollProgress";
+import { ScrollReveal } from "@/components/landing/ScrollReveal";
+import { TrustMarquee } from "@/components/landing/TrustMarquee";
 import Link from "next/link";
 import type { CSSProperties, SVGProps } from "react";
 
@@ -389,6 +394,8 @@ function HeroDomainCard({ domain }: { domain: Domain }) {
 export default function Home() {
   return (
     <>
+      <ScrollProgress />
+
       {/* Nav */}
       <header className="border-border/60 bg-canvas/80 sticky top-0 z-50 border-b backdrop-blur-sm">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4">
@@ -423,54 +430,53 @@ export default function Home() {
       </header>
 
       <main>
-        {/* Hero */}
-        <section className="bg-warm-wash overflow-hidden">
-          <div className="mx-auto max-w-6xl px-6 py-16 lg:py-24">
-            <div className="relative z-10 mx-auto max-w-3xl text-center">
-              <p className="eyebrow">Internships that actually teach you something</p>
+        <HeroExperience
+          cards={DOMAINS.map((domain) => (
+            <HeroDomainCard key={domain.id} domain={domain} />
+          ))}
+        >
+          <p className="eyebrow">Internships that actually teach you something</p>
 
-              <h1 className="mt-4 text-4xl leading-[1.1] font-semibold tracking-tight sm:text-5xl lg:text-[3.4rem]">
-                Learn by building <span className="text-brand">real projects</span>, not
-                watching slides
-              </h1>
+          <h1 className="mt-4 text-4xl leading-[1.1] font-semibold tracking-tight sm:text-5xl lg:text-[3.4rem]">
+            Learn by building <span className="headline-shimmer">real projects</span>, not
+            watching slides
+          </h1>
 
-              <p className="text-ink-secondary mx-auto mt-6 max-w-lg text-base leading-relaxed sm:text-lg">
-                Pick a domain, get GitHub-based tasks from our team, and finish with an offer
-                letter and certificate you can show employers.
-              </p>
+          <p className="text-ink-secondary mx-auto mt-6 max-w-lg text-base leading-relaxed sm:text-lg">
+            Pick a domain, get GitHub-based tasks from our team, and finish with an offer letter
+            and certificate you can show employers.
+          </p>
 
-              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <Link href="/signup" className={primaryBtn}>
-                  Get started
-                </Link>
-                <a href="#how-it-works" className={outlineBtn}>
-                  See how it works
-                </a>
-              </div>
-            </div>
-
-            {/* Scattered domain cards — centered below headline */}
-            <div className="relative mx-auto mt-12 h-52 w-full max-w-md sm:mt-14 sm:h-60 sm:max-w-lg lg:mt-16 lg:h-64 lg:max-w-xl">
-              {DOMAINS.map((domain) => (
-                <HeroDomainCard key={domain.id} domain={domain} />
-              ))}
-            </div>
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Link href="/signup" className={`${primaryBtn} cta-glow`}>
+              Get started
+            </Link>
+            <a href="#how-it-works" className={outlineBtn}>
+              See how it works
+            </a>
           </div>
-        </section>
+
+          <TrustMarquee />
+        </HeroExperience>
 
         {/* Domains */}
         <section id="domains" className="section-pad scroll-mt-20">
           <div className="mx-auto max-w-6xl">
-            <p className="eyebrow-brand">Choose your field</p>
-            <h2 className="section-heading mt-3">Three domains, one serious internship</h2>
-            <p className="section-lead">
-              Every track gives you structured tasks in a real repo — the difference is what you
-              build.
-            </p>
+            <ScrollReveal>
+              <p className="eyebrow-brand">Choose your field</p>
+              <h2 className="section-heading mt-3">Three domains, one serious internship</h2>
+              <p className="section-lead">
+                Every track gives you structured tasks in a real repo — the difference is what
+                you build.
+              </p>
+            </ScrollReveal>
 
             <ul className="border-brand/20 divide-border mt-10 divide-y border-y">
-              {DOMAINS.map((domain) => (
-                <DomainListItem key={domain.id} domain={domain} />
+              {DOMAINS.map((domain, index) => (
+                <DomainListItemMotion key={domain.id} index={index}>
+                  <h3 className="item-title text-brand">{domain.name}</h3>
+                  <p className="section-body mt-1.5">{domain.sectionDescription}</p>
+                </DomainListItemMotion>
               ))}
             </ul>
           </div>
@@ -479,31 +485,37 @@ export default function Home() {
         {/* Pricing */}
         <section id="pricing" className="section-pad section-accent-wash scroll-mt-20">
           <div className="mx-auto max-w-6xl">
-            <p className="eyebrow-brand">Simple pricing</p>
-            <h2 className="section-heading mt-3">Pick the plan that fits your pace</h2>
+            <ScrollReveal>
+              <p className="eyebrow-brand">Simple pricing</p>
+              <h2 className="section-heading mt-3">Pick the plan that fits your pace</h2>
+            </ScrollReveal>
 
             <div className="mt-10 grid gap-6 md:grid-cols-2">
-              <PricingCard
-                name="Basic"
-                price="₹299"
-                duration="2 to 6 weeks, you choose"
-                features={[
-                  "Pick your duration within the range",
-                  "Get randomly assigned real tasks",
-                  "Offer letter + certificate on completion",
-                ]}
-              />
-              <PricingCard
-                name="Premium"
-                price="₹999"
-                duration="Up to 3 months, you choose"
-                features={[
-                  "Regular 1:1 Google Meet sessions",
-                  "Hand-picked substantial tasks from our team",
-                  "Offer letter + certificate on completion",
-                ]}
-                highlighted
-              />
+              <ScrollReveal delay={0.05}>
+                <PricingCard
+                  name="Basic"
+                  price="₹299"
+                  duration="2 to 6 weeks, you choose"
+                  features={[
+                    "Pick your duration within the range",
+                    "Get randomly assigned real tasks",
+                    "Offer letter + certificate on completion",
+                  ]}
+                />
+              </ScrollReveal>
+              <ScrollReveal delay={0.12}>
+                <PricingCard
+                  name="Premium"
+                  price="₹999"
+                  duration="Up to 3 months, you choose"
+                  features={[
+                    "Regular 1:1 Google Meet sessions",
+                    "Hand-picked substantial tasks from our team",
+                    "Offer letter + certificate on completion",
+                  ]}
+                  highlighted
+                />
+              </ScrollReveal>
             </div>
           </div>
         </section>
@@ -511,12 +523,19 @@ export default function Home() {
         {/* How it works */}
         <section id="how-it-works" className="section-pad scroll-mt-20">
           <div className="mx-auto max-w-3xl">
-            <p className="eyebrow-brand">How it works</p>
-            <h2 className="section-heading mt-3">From signup to certificate</h2>
+            <ScrollReveal>
+              <p className="eyebrow-brand">How it works</p>
+              <h2 className="section-heading mt-3">From signup to certificate</h2>
+            </ScrollReveal>
 
             <ol className="divide-border border-brand/20 mt-10 space-y-0 divide-y border-y">
               {STEPS.map((step, index) => (
-                <li key={step.title} className="flex gap-5 py-6">
+                <ScrollReveal
+                  key={step.title}
+                  as="li"
+                  delay={index * 0.06}
+                  className="flex gap-5 py-6"
+                >
                   <span className="bg-brand text-surface flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-semibold tabular-nums shadow-sm">
                     {index + 1}
                   </span>
@@ -524,7 +543,7 @@ export default function Home() {
                     <h3 className="item-title">{step.title}</h3>
                     <p className="section-body mt-1.5">{step.detail}</p>
                   </div>
-                </li>
+                </ScrollReveal>
               ))}
             </ol>
           </div>
@@ -558,15 +577,6 @@ export default function Home() {
   );
 }
 
-function DomainListItem({ domain }: { domain: Domain }) {
-  return (
-    <li className="border-brand border-l-[3px] py-5 pl-5">
-      <h3 className="item-title text-brand">{domain.name}</h3>
-      <p className="section-body mt-1.5">{domain.sectionDescription}</p>
-    </li>
-  );
-}
-
 function PricingCard({
   name,
   price,
@@ -582,7 +592,7 @@ function PricingCard({
 }) {
   return (
     <article
-      className={`bg-surface flex flex-col rounded-xl border p-8 shadow-sm ${
+      className={`pricing-card bg-surface flex h-full flex-col rounded-xl border p-8 shadow-sm ${
         highlighted
           ? "border-brand ring-brand/15 ring-2"
           : "border-border hover:border-brand/30"
