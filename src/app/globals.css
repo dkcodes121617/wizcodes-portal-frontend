@@ -177,6 +177,77 @@
     color: var(--color-ink-muted);
   }
 
+  .eyebrow-brand {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-brand);
+  }
+
+  .section-accent-wash {
+    background-color: var(--color-baby-wash);
+    background-image: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-baby-wash) 70%, var(--color-surface-raised)) 0%,
+      var(--color-surface-raised) 100%
+    );
+  }
+
+  /* Below-hero type scale — one heading, one body, one supporting size. */
+  .section-pad {
+    padding-block: 5rem;
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    .section-pad {
+      padding-block: 6rem;
+    }
+  }
+
+  .section-heading {
+    font-size: 1.875rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    color: var(--color-ink);
+  }
+
+  @media (min-width: 640px) {
+    .section-heading {
+      font-size: 2.25rem;
+    }
+  }
+
+  .section-lead {
+    margin-top: 1rem;
+    max-width: 42rem;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: var(--color-ink-secondary);
+  }
+
+  .section-body {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--color-ink-secondary);
+  }
+
+  .section-supporting {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-ink-muted);
+  }
+
+  .item-title {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-ink);
+  }
+
   .card-tilt-1 {
     --card-rotate: -7deg;
   }

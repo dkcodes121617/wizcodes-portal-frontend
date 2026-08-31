@@ -89,8 +89,9 @@ function Wordmark({ dark = false }: { dark?: boolean }) {
 const primaryBtn =
   "bg-brand hover:bg-brand-strong inline-flex items-center justify-center rounded-full px-6 py-2.5 text-sm font-medium text-white transition-colors";
 const outlineBtn =
-  "border-border bg-surface hover:bg-surface-raised text-ink inline-flex items-center justify-center rounded-full border px-6 py-2.5 text-sm font-medium transition-colors";
-const ghostLink = "text-ink-secondary hover:text-ink text-sm font-medium transition-colors";
+  "border-brand/25 bg-surface hover:border-brand/50 hover:bg-baby-wash text-ink inline-flex items-center justify-center rounded-full border px-6 py-2.5 text-sm font-medium transition-colors";
+const ghostLink = "text-brand hover:text-brand-strong text-sm font-medium transition-colors";
+const navLink = "text-ink-secondary hover:text-brand text-sm font-medium transition-colors";
 
 /* -------------------------------------------------------------------------- */
 /*  Clay-style domain icons (token colors only)                               */
@@ -399,13 +400,13 @@ export default function Home() {
             className="text-ink-secondary hidden items-center gap-8 text-sm font-medium md:flex"
             aria-label="Main"
           >
-            <a href="#domains" className="hover:text-ink transition-colors">
+            <a href="#domains" className={navLink}>
               Domains
             </a>
-            <a href="#pricing" className="hover:text-ink transition-colors">
+            <a href="#pricing" className={navLink}>
               Pricing
             </a>
-            <a href="#how-it-works" className="hover:text-ink transition-colors">
+            <a href="#how-it-works" className={navLink}>
               How it works
             </a>
           </nav>
@@ -429,7 +430,7 @@ export default function Home() {
               <p className="eyebrow">Internships that actually teach you something</p>
 
               <h1 className="mt-4 text-4xl leading-[1.1] font-semibold tracking-tight sm:text-5xl lg:text-[3.4rem]">
-                Learn by building <span className="text-ink-secondary">real projects</span>, not
+                Learn by building <span className="text-brand">real projects</span>, not
                 watching slides
               </h1>
 
@@ -458,34 +459,30 @@ export default function Home() {
         </section>
 
         {/* Domains */}
-        <section id="domains" className="scroll-mt-20 px-6 py-20">
+        <section id="domains" className="section-pad scroll-mt-20">
           <div className="mx-auto max-w-6xl">
-            <p className="eyebrow">Choose your field</p>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              Three domains, one serious internship
-            </h2>
-            <p className="text-ink-secondary mt-4 max-w-2xl text-base">
+            <p className="eyebrow-brand">Choose your field</p>
+            <h2 className="section-heading mt-3">Three domains, one serious internship</h2>
+            <p className="section-lead">
               Every track gives you structured tasks in a real repo — the difference is what you
               build.
             </p>
 
-            <div className="mt-12 grid gap-6 md:grid-cols-3">
+            <ul className="border-brand/20 divide-border mt-10 divide-y border-y">
               {DOMAINS.map((domain) => (
-                <DomainGridCard key={domain.id} domain={domain} />
+                <DomainListItem key={domain.id} domain={domain} />
               ))}
-            </div>
+            </ul>
           </div>
         </section>
 
         {/* Pricing */}
-        <section id="pricing" className="bg-surface-raised scroll-mt-20 px-6 py-20">
+        <section id="pricing" className="section-pad section-accent-wash scroll-mt-20">
           <div className="mx-auto max-w-6xl">
-            <p className="eyebrow">Simple pricing</p>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              Pick the plan that fits your pace
-            </h2>
+            <p className="eyebrow-brand">Simple pricing</p>
+            <h2 className="section-heading mt-3">Pick the plan that fits your pace</h2>
 
-            <div className="mt-12 grid gap-8 md:grid-cols-2">
+            <div className="mt-10 grid gap-6 md:grid-cols-2">
               <PricingCard
                 name="Basic"
                 price="₹299"
@@ -512,24 +509,20 @@ export default function Home() {
         </section>
 
         {/* How it works */}
-        <section id="how-it-works" className="scroll-mt-20 px-6 py-20">
-          <div className="mx-auto max-w-6xl">
-            <p className="eyebrow">How it works</p>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              From signup to certificate
-            </h2>
+        <section id="how-it-works" className="section-pad scroll-mt-20">
+          <div className="mx-auto max-w-3xl">
+            <p className="eyebrow-brand">How it works</p>
+            <h2 className="section-heading mt-3">From signup to certificate</h2>
 
-            <ol className="mt-12 space-y-8">
+            <ol className="divide-border border-brand/20 mt-10 space-y-0 divide-y border-y">
               {STEPS.map((step, index) => (
-                <li key={step.title} className="flex gap-5">
-                  <span className="bg-brand text-surface flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-semibold">
+                <li key={step.title} className="flex gap-5 py-6">
+                  <span className="bg-brand text-surface flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-semibold tabular-nums shadow-sm">
                     {index + 1}
                   </span>
                   <div>
-                    <h3 className="text-lg font-semibold">{step.title}</h3>
-                    <p className="text-ink-secondary mt-1 text-sm leading-relaxed">
-                      {step.detail}
-                    </p>
+                    <h3 className="item-title">{step.title}</h3>
+                    <p className="section-body mt-1.5">{step.detail}</p>
                   </div>
                 </li>
               ))}
@@ -539,24 +532,24 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-border border-t px-6 py-12">
+      <footer className="border-border section-pad border-t !py-12">
         <div className="mx-auto flex max-w-6xl flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
           <Wordmark />
           <nav className="text-ink-secondary flex flex-wrap gap-6 text-sm" aria-label="Footer">
-            <a href="#domains" className="hover:text-ink transition-colors">
+            <a href="#domains" className={navLink}>
               Domains
             </a>
-            <a href="#pricing" className="hover:text-ink transition-colors">
+            <a href="#pricing" className={navLink}>
               Pricing
             </a>
-            <Link href="/login" className="hover:text-ink transition-colors">
+            <Link href="/login" className={navLink}>
               Sign In
             </Link>
-            <Link href="/signup" className="hover:text-ink transition-colors">
+            <Link href="/signup" className={navLink}>
               Sign Up
             </Link>
           </nav>
-          <p className="text-ink-muted text-sm">
+          <p className="section-supporting">
             © {new Date().getFullYear()} WizCodes. All rights reserved.
           </p>
         </div>
@@ -565,21 +558,12 @@ export default function Home() {
   );
 }
 
-function DomainGridCard({ domain }: { domain: Domain }) {
-  const { Icon } = domain;
-
+function DomainListItem({ domain }: { domain: Domain }) {
   return (
-    <article className="border-border bg-surface rounded-2xl border p-6 shadow-sm">
-      <div
-        className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl ${domain.tintClass}`}
-      >
-        <Icon className="h-9 w-9" idSuffix={`grid-${domain.id}`} />
-      </div>
-      <h3 className={`mt-4 text-lg font-semibold ${domain.accentClass}`}>{domain.name}</h3>
-      <p className="text-ink-secondary mt-2 text-sm leading-relaxed">
-        {domain.sectionDescription}
-      </p>
-    </article>
+    <li className="border-brand border-l-[3px] py-5 pl-5">
+      <h3 className="item-title text-brand">{domain.name}</h3>
+      <p className="section-body mt-1.5">{domain.sectionDescription}</p>
+    </li>
   );
 }
 
@@ -598,21 +582,23 @@ function PricingCard({
 }) {
   return (
     <article
-      className={`border-border bg-surface flex flex-col rounded-2xl border p-8 shadow-sm ${
-        highlighted ? "ring-brand ring-2 ring-offset-2" : ""
+      className={`bg-surface flex flex-col rounded-xl border p-8 shadow-sm ${
+        highlighted
+          ? "border-brand ring-brand/15 ring-2"
+          : "border-border hover:border-brand/30"
       }`}
     >
-      <h3 className="text-xl font-semibold">{name}</h3>
-      <p className="mt-2 text-4xl font-semibold tracking-tight">
+      <h3 className={`item-title ${highlighted ? "text-brand" : ""}`}>{name}</h3>
+      <p className="text-brand mt-3 text-3xl font-semibold tracking-tight">
         {price}
-        <span className="text-ink-muted text-base font-normal"> / internship</span>
+        <span className="section-supporting text-ink-secondary font-normal"> / internship</span>
       </p>
-      <p className="text-ink-secondary mt-2 text-sm">{duration}</p>
+      <p className="section-supporting mt-2">{duration}</p>
 
-      <ul className="text-ink-secondary mt-6 flex-1 space-y-3 text-sm">
+      <ul className="section-body mt-6 flex-1 space-y-3">
         {features.map((feature) => (
-          <li key={feature} className="flex gap-2">
-            <span className="text-brand mt-0.5" aria-hidden>
+          <li key={feature} className="flex gap-2.5">
+            <span className="text-brand mt-0.5 shrink-0 font-semibold" aria-hidden>
               ✓
             </span>
             {feature}
