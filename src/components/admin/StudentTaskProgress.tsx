@@ -18,7 +18,10 @@ function ProgressBar({ summary }: { summary: TaskProgressSummary }) {
   return (
     <div className="bg-surface-raised h-2.5 w-full overflow-hidden rounded-full">
       <div className="flex h-full w-full">
-        <div className="bg-success h-full transition-all" style={{ width: `${completedWidth}%` }} />
+        <div
+          className="bg-success h-full transition-all"
+          style={{ width: `${completedWidth}%` }}
+        />
         <div
           className="bg-warning h-full transition-all"
           style={{ width: `${submittedWidth}%` }}
