@@ -1,7 +1,7 @@
 import { LoginForm } from "@/components/auth/LoginForm";
 
 export const metadata = {
-  title: "Log in",
+  title: "Log In",
 };
 
 export default function LoginPage() {
