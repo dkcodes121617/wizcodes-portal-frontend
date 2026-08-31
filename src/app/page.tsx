@@ -15,7 +15,7 @@ import Link from "next/link";
 const DOMAINS = [
   {
     id: "web" as const,
-    name: "Web Development",
+    name: "Web Developments",
     sectionDescription:
       "Build components, integrate APIs, and ship features the way product teams do.",
     tintClass: "bg-web-bg",
