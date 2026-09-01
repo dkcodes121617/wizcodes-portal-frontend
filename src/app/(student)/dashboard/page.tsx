@@ -19,6 +19,7 @@ import {
   isStudentEnrolled,
   resolveDomainName,
   resolvePlanLabel,
+  formatInternshipDateRange,
   type DomainOption,
   type InternshipPlanOption,
 } from "@/lib/enrollment";
@@ -111,6 +112,10 @@ export default function DashboardPage() {
     resolvePlanLabel(student?.internship_plan_id ?? null, plans) ??
     student?.internship_plan_id ??
     "—";
+  const internshipDateRange = formatInternshipDateRange(
+    student?.internship_start_date ?? null,
+    student?.internship_end_date ?? null,
+  );
 
   const accessPending = student?.access_status === PAYMENT_ACCESS_PENDING;
   const accessGranted = student?.access_status === PAYMENT_ACCESS_GRANTED;
@@ -138,6 +143,8 @@ export default function DashboardPage() {
             planLabel={planLabel}
             durationWeeks={student?.chosen_duration_weeks ?? null}
             college={student?.college ?? null}
+            certificateName={student?.certificate_name ?? null}
+            internshipDateRange={internshipDateRange}
           />
         </div>
 

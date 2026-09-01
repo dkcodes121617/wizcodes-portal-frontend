@@ -14,7 +14,7 @@ const navLink = "text-ink-secondary hover:text-ink text-sm font-medium transitio
 export function LandingNav() {
   return (
     <header className="landing-nav sticky top-0 z-50">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-4">
         <Link href="/" className="shrink-0">
           <Wordmark />
         </Link>

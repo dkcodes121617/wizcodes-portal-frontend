@@ -3,6 +3,8 @@ interface EnrollmentSummaryProps {
   planLabel: string;
   durationWeeks: number | null;
   college: string | null;
+  certificateName: string | null;
+  internshipDateRange: string | null;
 }
 
 export function EnrollmentSummary({
@@ -10,6 +12,8 @@ export function EnrollmentSummary({
   planLabel,
   durationWeeks,
   college,
+  certificateName,
+  internshipDateRange,
 }: EnrollmentSummaryProps) {
   return (
     <dl className="border-border space-y-4 rounded-xl border px-5 py-4 text-left text-sm">
@@ -33,6 +37,22 @@ export function EnrollmentSummary({
             College
           </dt>
           <dd className="text-ink mt-1 font-medium">{college}</dd>
+        </div>
+      ) : null}
+      {certificateName ? (
+        <div>
+          <dt className="text-ink-muted text-xs font-medium tracking-wide uppercase">
+            Name on certificate
+          </dt>
+          <dd className="text-ink mt-1 font-medium">{certificateName}</dd>
+        </div>
+      ) : null}
+      {internshipDateRange ? (
+        <div>
+          <dt className="text-ink-muted text-xs font-medium tracking-wide uppercase">
+            Internship dates
+          </dt>
+          <dd className="text-ink mt-1 font-medium">{internshipDateRange}</dd>
         </div>
       ) : null}
     </dl>

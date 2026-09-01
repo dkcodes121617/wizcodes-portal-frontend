@@ -31,6 +31,9 @@ export interface EnrollmentRequestBody {
   chosen_duration_weeks: number;
   college: string;
   year_of_study: string;
+  certificate_name: string;
+  internship_start_date: string;
+  internship_end_date: string;
 }
 
 export const DOMAINS_API_PATH = "/api/v1/domains";
@@ -80,6 +83,8 @@ export function resolveDomainName(
   if (!domainId) return null;
   return domains.find((domain) => domain.id === domainId)?.name ?? null;
 }
+
+export { formatInternshipDateRange } from "@/lib/dates";
 
 export function resolvePlanLabel(
   planId: string | null,

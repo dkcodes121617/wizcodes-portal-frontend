@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { SUPPORT_EMAIL, SUPPORT_EMAIL_HREF } from "@/lib/support";
+
 function Wordmark() {
   return (
     <span className="text-xl font-bold tracking-tight">
@@ -14,13 +16,20 @@ const footerLink = "text-ink-secondary hover:text-ink text-sm transition-colors"
 export function LandingFooter() {
   return (
     <footer className="landing-footer border-border border-t">
-      <div className="mx-auto max-w-6xl px-6 py-14">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+        <div className="grid gap-8 sm:grid-cols-2 sm:gap-10 lg:grid-cols-4">
           <div className="lg:col-span-2">
             <Wordmark />
             <p className="text-ink-secondary mt-4 max-w-sm text-sm leading-relaxed">
               Hands-on internships for students in India. Build projects, earn credentials, and
               prepare for your first role.
+            </p>
+            <p className="text-ink-secondary mt-4 max-w-sm text-sm leading-relaxed">
+              For any support or payment-related queries, contact us at{" "}
+              <a href={SUPPORT_EMAIL_HREF} className={`${footerLink} font-medium`}>
+                {SUPPORT_EMAIL}
+              </a>
+              .
             </p>
           </div>
 

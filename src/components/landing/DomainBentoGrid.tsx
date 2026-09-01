@@ -17,7 +17,7 @@ interface DomainBentoGridProps {
 
 export function DomainBentoGrid({ domains }: DomainBentoGridProps) {
   return (
-    <div className="mt-10 grid gap-5 lg:grid-cols-3">
+    <div className="mt-8 grid gap-3 sm:mt-10 sm:gap-5 lg:grid-cols-3">
       {domains.map((domain, index) => {
         const Icon = DOMAIN_ICONS[domain.id];
 
@@ -25,11 +25,11 @@ export function DomainBentoGrid({ domains }: DomainBentoGridProps) {
           <ScrollReveal key={domain.id} delay={index * 0.06}>
             <article className={`domain-card ${domain.tintClass}`}>
               <div
-                className={`domain-card-icon ${domain.accentClass} bg-surface border-border inline-flex h-11 w-11 items-center justify-center rounded-lg border`}
+                className={`domain-card-icon ${domain.accentClass} bg-surface border-border inline-flex h-9 w-9 items-center justify-center rounded-lg border sm:h-11 sm:w-11`}
               >
                 <Icon className="h-6 w-6" idSuffix={`bento-${domain.id}`} />
               </div>
-              <h3 className="item-title mt-5">{domain.name}</h3>
+              <h3 className="item-title mt-3 sm:mt-5">{domain.name}</h3>
               <p className="section-body mt-2 text-sm">{domain.description}</p>
             </article>
           </ScrollReveal>

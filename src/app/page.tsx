@@ -62,17 +62,17 @@ export default function Home() {
         <HeroExperience>
           <HeroBadge />
 
-          <h1 className="display-heading hero-heading mt-5">
+          <h1 className="display-heading hero-heading mt-4 sm:mt-5">
             Learn by building.
             <span className="text-brand block sm:inline"> Graduate with proof.</span>
           </h1>
 
-          <p className="text-ink-secondary mx-auto mt-6 max-w-2xl text-base leading-relaxed sm:text-[1.0625rem]">
+          <p className="text-ink-secondary mx-auto mt-4 max-w-2xl text-sm leading-relaxed sm:mt-6 sm:text-base sm:leading-relaxed md:text-[1.0625rem]">
             WizCodes gives students structured internship tasks across Web, AI, and Mobile —
             with certificates employers recognize. Plans start at ₹299.
           </p>
 
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <div className="mt-6 flex flex-col items-center justify-center gap-2.5 sm:mt-8 sm:gap-3 sm:flex-row">
             <Link href="/signup" className="btn-primary btn-primary-lg">
               Start internship
             </Link>
@@ -113,7 +113,7 @@ export default function Home() {
               </p>
             </ScrollReveal>
 
-            <div className="mt-12 grid gap-5 lg:grid-cols-2">
+            <div className="mt-8 grid gap-3 sm:mt-12 sm:gap-5 lg:grid-cols-2">
               <ScrollReveal delay={0.05}>
                 <PricingCard
                   name="Basic"
@@ -168,17 +168,23 @@ function PricingCard({
 }) {
   return (
     <article className={`pricing-panel ${highlighted ? "pricing-panel-featured" : ""}`}>
-      {highlighted ? <span className="pricing-panel-badge">Recommended</span> : null}
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="text-ink text-lg font-semibold">{name}</h3>
+          {highlighted ? <p className="text-ink-muted mt-1 text-sm">{duration}</p> : null}
+        </div>
 
-      <div className="flex items-baseline justify-between gap-4">
-        <h3 className="text-ink text-lg font-semibold">{name}</h3>
-        <p className="text-ink-muted text-sm">{duration}</p>
+        {highlighted ? (
+          <span className="pricing-panel-badge shrink-0">Recommended</span>
+        ) : (
+          <p className="text-ink-muted shrink-0 text-sm">{duration}</p>
+        )}
       </div>
 
-      <p className="pricing-panel-price mt-5">{price}</p>
+      <p className="pricing-panel-price mt-4 sm:mt-5">{price}</p>
       <p className="text-ink-muted mt-1 text-sm">per internship</p>
 
-      <ul className="border-border mt-8 space-y-3 border-t pt-8">
+      <ul className="border-border mt-5 space-y-2.5 border-t pt-5 sm:mt-8 sm:space-y-3 sm:pt-8">
         {features.map((feature) => (
           <li key={feature} className="pricing-panel-feature">
             {feature}
@@ -188,7 +194,7 @@ function PricingCard({
 
       <Link
         href="/signup"
-        className={`mt-8 w-full text-center ${highlighted ? "btn-primary" : "btn-secondary"}`}
+        className={`mt-5 w-full text-center sm:mt-8 ${highlighted ? "btn-primary" : "btn-secondary"}`}
       >
         Get started
       </Link>

@@ -16,8 +16,9 @@ import {
   type AdminStudent,
 } from "@/lib/admin-students";
 import { fetchPremiumAdminTasks, type AdminTask } from "@/lib/admin-tasks";
-import { type DomainOption } from "@/lib/enrollment";
-import { resolvePaymentScreenshotUrl } from "@/lib/payment";
+import { type DomainOption, formatInternshipDateRange } from "@/lib/enrollment";
+import { PaymentScreenshotImage } from "@/components/dashboard/PaymentScreenshotImage";
+import { adminPaymentScreenshotPath } from "@/lib/payment";
 import { type StudentTaskAssignment } from "@/lib/tasks";
 
 const PREMIUM_TIER = "premium_999";
@@ -62,18 +63,21 @@ export function StudentDetailPanel({
   const [grantSuccess, setGrantSuccess] = useState<string | null>(null);
   const [assignSuccess, setAssignSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [imageLoadFailed, setImageLoadFailed] = useState(false);
 
   const granted = isAccessGranted(student);
   const premium = isPremiumStudent(student, plans);
   const basic = isBasicStudent(student, plans);
-  const screenshotUrl = resolvePaymentScreenshotUrl(student.payment_screenshot_url);
+  const adminToken = getAdminToken();
   const planLabel = student.internship_plan_id
     ? formatPlanTier(planTierForStudent(student, plans) ?? "")
     : "—";
   const domainLabel = student.domain_id
     ? (domains.find((domain) => domain.id === student.domain_id)?.name ?? "Unknown domain")
     : "—";
+  const internshipDateRange = formatInternshipDateRange(
+    student.internship_start_date,
+    student.internship_end_date,
+  );
 
   const assignedTaskIds = useMemo(
     () => new Set(assignments.map((assignment) => assignment.task_id)),
@@ -226,6 +230,14 @@ export function StudentDetailPanel({
               <dd className="text-ink text-right">{student.year_of_study ?? "—"}</dd>
             </div>
             <div className="flex justify-between gap-4">
+              <dt className="text-ink-secondary">Certificate name</dt>
+              <dd className="text-ink text-right">{student.certificate_name ?? "—"}</dd>
+            </div>
+            <div className="flex justify-between gap-4">
+              <dt className="text-ink-secondary">Internship dates</dt>
+              <dd className="text-ink text-right">{internshipDateRange ?? "—"}</dd>
+            </div>
+            <div className="flex justify-between gap-4">
               <dt className="text-ink-secondary">Access</dt>
               <dd className="text-ink text-right capitalize">{student.access_status}</dd>
             </div>
@@ -236,19 +248,17 @@ export function StudentDetailPanel({
           <p className="text-ink-muted text-xs font-medium tracking-wide uppercase">
             Payment screenshot
           </p>
-          {screenshotUrl && !imageLoadFailed ? (
-            // eslint-disable-next-line @next/next/no-img-element -- admin must view the raw uploaded proof URL
-            <img
-              src={screenshotUrl}
+          {hasPaymentScreenshot(student) ? (
+            <PaymentScreenshotImage
+              token={adminToken}
+              apiPath={adminPaymentScreenshotPath(student.id)}
+              hasScreenshot
               alt="Payment screenshot uploaded by student"
               className="border-border mt-3 max-h-80 w-full rounded-lg border object-contain"
-              onError={() => setImageLoadFailed(true)}
             />
           ) : (
             <p className="text-ink-secondary mt-3 text-sm">
-              {hasPaymentScreenshot(student)
-                ? "Screenshot uploaded but could not be displayed."
-                : "No payment screenshot uploaded yet."}
+              No payment screenshot uploaded yet.
             </p>
           )}
         </section>

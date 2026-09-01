@@ -1,3 +1,5 @@
+import { SupportContactNote } from "@/components/support/SupportContactNote";
+
 function LockIcon() {
   return (
     <svg
@@ -47,6 +49,8 @@ export function LockedTasksSection() {
           </p>
         </div>
       </div>
+
+      <SupportContactNote className="mt-5" />
     </section>
   );
 }

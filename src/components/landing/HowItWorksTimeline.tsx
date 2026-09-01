@@ -20,7 +20,7 @@ export function HowItWorksTimeline({ steps }: HowItWorksTimelineProps) {
           <h2 className="section-heading mt-3">A clear path from signup to certificate</h2>
         </ScrollReveal>
 
-        <ol className="process-list mt-12">
+        <ol className="process-list mt-8 sm:mt-12">
           {steps.map((step, index) => (
             <ScrollReveal
               key={step.title}

@@ -3,12 +3,15 @@
 import { useRef, useState, type ChangeEvent } from "react";
 
 import { Button } from "@/components/ui/Button";
+import { PaymentInstructions } from "@/components/dashboard/PaymentInstructions";
+import { PaymentScreenshotImage } from "@/components/dashboard/PaymentScreenshotImage";
+import { SupportContactNote } from "@/components/support/SupportContactNote";
 import { ApiError } from "@/lib/api";
 import type { StudentProfile } from "@/lib/auth";
 import { getToken } from "@/lib/auth";
 import {
   PAYMENT_ACCESS_PENDING,
-  resolvePaymentScreenshotUrl,
+  STUDENT_PAYMENT_SCREENSHOT_VIEW_PATH,
   uploadPaymentScreenshot,
   validatePaymentScreenshotFile,
 } from "@/lib/payment";
@@ -24,16 +27,13 @@ export function PaymentSection({ student, onStudentUpdated }: PaymentSectionProp
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [imageLoadFailed, setImageLoadFailed] = useState(false);
 
   const hasScreenshot = Boolean(student.payment_screenshot_url);
-  const storedImageUrl = resolvePaymentScreenshotUrl(student.payment_screenshot_url);
-  const displayImageUrl = previewUrl ?? storedImageUrl;
+  const authToken = getToken();
 
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0] ?? null;
     setUploadError(null);
-    setImageLoadFailed(false);
 
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
@@ -106,24 +106,23 @@ export function PaymentSection({ student, onStudentUpdated }: PaymentSectionProp
         </p>
       ) : (
         <p className="text-ink-secondary mt-3 text-sm">
-          Upload a screenshot of your payment (UPI/bank transfer) so an admin can verify it.
+          Pay using the UPI details below, then upload a screenshot of your successful payment.
         </p>
       )}
 
-      {displayImageUrl && !imageLoadFailed ? (
+      <PaymentInstructions />
+
+      {hasScreenshot || previewUrl ? (
         <div className="border-border mt-4 overflow-hidden rounded-lg border">
-          {/* eslint-disable-next-line @next/next/no-img-element -- user-uploaded blob or API-relative URL */}
-          <img
-            src={displayImageUrl}
+          <PaymentScreenshotImage
+            token={authToken}
+            apiPath={STUDENT_PAYMENT_SCREENSHOT_VIEW_PATH}
+            hasScreenshot={hasScreenshot}
+            localPreviewUrl={previewUrl}
             alt="Your payment screenshot"
             className="max-h-64 w-full object-contain"
-            onError={() => setImageLoadFailed(true)}
           />
         </div>
-      ) : hasScreenshot ? (
-        <p className="text-ink-muted mt-4 text-xs">
-          Preview unavailable. Choose a new image below to replace your screenshot.
-        </p>
       ) : null}
 
       <div className="mt-4 space-y-3">
@@ -152,6 +151,8 @@ export function PaymentSection({ student, onStudentUpdated }: PaymentSectionProp
           {hasScreenshot ? "Replace payment screenshot" : "Upload payment screenshot"}
         </Button>
       </div>
+
+      <SupportContactNote className="mt-4" />
     </section>
   );
 }

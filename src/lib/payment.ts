@@ -7,6 +7,11 @@ import type { StudentProfile } from "@/lib/auth";
 import { env } from "@/lib/env";
 
 export const PAYMENT_SCREENSHOT_API_PATH = "/api/v1/student/payment-screenshot";
+export const STUDENT_PAYMENT_SCREENSHOT_VIEW_PATH = PAYMENT_SCREENSHOT_API_PATH;
+
+export function adminPaymentScreenshotPath(studentId: string): string {
+  return `/api/v1/admin/students/${studentId}/payment-screenshot`;
+}
 
 export const PAYMENT_ACCESS_PENDING = "pending";
 export const PAYMENT_ACCESS_GRANTED = "granted";
@@ -33,7 +38,33 @@ export function resolvePaymentScreenshotUrl(relativePath: string | null): string
   if (relativePath.startsWith("http://") || relativePath.startsWith("https://")) {
     return relativePath;
   }
-  return `${env.apiUrl}/${relativePath.replace(/^\//, "")}`;
+  return null;
+}
+
+export async function fetchPaymentScreenshotObjectUrl(
+  token: string,
+  apiPath: string,
+): Promise<string> {
+  const url = `${env.apiUrl}${apiPath}`;
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "image/*",
+    },
+    credentials: "omit",
+    signal: AbortSignal.timeout(30_000),
+  });
+
+  if (!response.ok) {
+    throw new ApiError(
+      response.status,
+      "Could not load payment screenshot.",
+      response.headers.get("X-Request-ID") ?? undefined,
+    );
+  }
+
+  const blob = await response.blob();
+  return URL.createObjectURL(blob);
 }
 
 export async function uploadPaymentScreenshot(

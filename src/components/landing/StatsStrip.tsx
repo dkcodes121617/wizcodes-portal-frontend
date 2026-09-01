@@ -17,7 +17,7 @@ export function StatsStrip() {
           <ScrollReveal
             key={stat.label}
             delay={index * 0.04}
-            className="stats-band-cell px-6 py-8 text-center sm:px-8"
+            className="stats-band-cell px-4 py-5 text-center sm:px-8 sm:py-8"
           >
             <p className="stats-band-value">{stat.value}</p>
             <p className="stats-band-label">{stat.label}</p>

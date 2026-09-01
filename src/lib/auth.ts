@@ -22,6 +22,9 @@ export interface StudentProfile {
   chosen_duration_weeks: number | null;
   college: string | null;
   year_of_study: string | null;
+  certificate_name: string | null;
+  internship_start_date: string | null;
+  internship_end_date: string | null;
   payment_screenshot_url: string | null;
   access_status: string;
   access_granted_by: string | null;

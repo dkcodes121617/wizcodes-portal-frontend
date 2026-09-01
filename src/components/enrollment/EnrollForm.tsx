@@ -6,10 +6,17 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 
 import { AuthCard } from "@/components/auth/AuthCard";
 import { Button } from "@/components/ui/Button";
+import { DateInput } from "@/components/ui/DateInput";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
+import { SupportContactNote } from "@/components/support/SupportContactNote";
 import { ApiError, api } from "@/lib/api";
 import { clearToken, getToken, type StudentProfile } from "@/lib/auth";
+import {
+  formatIsoDateDdMmYyyy,
+  getMaxInternshipEndDateIso,
+  isInternshipEndDateValid,
+} from "@/lib/dates";
 import {
   DOMAINS_ENDPOINT_GAP_MESSAGE,
   fetchActiveDomains,
@@ -30,6 +37,9 @@ interface FieldErrors {
   chosen_duration_weeks?: string;
   college?: string;
   year_of_study?: string;
+  certificate_name?: string;
+  internship_start_date?: string;
+  internship_end_date?: string;
   form?: string;
 }
 
@@ -42,6 +52,9 @@ export function EnrollForm() {
   const [durationWeeks, setDurationWeeks] = useState("");
   const [college, setCollege] = useState("");
   const [yearOfStudy, setYearOfStudy] = useState("");
+  const [certificateName, setCertificateName] = useState("");
+  const [internshipStartDate, setInternshipStartDate] = useState("");
+  const [internshipEndDate, setInternshipEndDate] = useState("");
   const [errors, setErrors] = useState<FieldErrors>({});
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -51,6 +64,21 @@ export function EnrollForm() {
     () => plans.find((plan) => plan.id === planId) ?? null,
     [planId, plans],
   );
+
+  const duration = Number(durationWeeks);
+  const maxEndDate = useMemo(() => {
+    if (!internshipStartDate || !durationWeeks || Number.isNaN(duration) || duration <= 0) {
+      return null;
+    }
+    return getMaxInternshipEndDateIso(internshipStartDate, duration);
+  }, [internshipStartDate, durationWeeks, duration]);
+
+  useEffect(() => {
+    if (!internshipStartDate || !maxEndDate || !internshipEndDate) return;
+    if (internshipEndDate < internshipStartDate || internshipEndDate > maxEndDate) {
+      setInternshipEndDate("");
+    }
+  }, [internshipStartDate, maxEndDate]);
 
   useEffect(() => {
     const token = getToken();
@@ -72,6 +100,8 @@ export function EnrollForm() {
           router.replace("/dashboard");
           return;
         }
+
+        setCertificateName(profile.name);
 
         const [plansResult, domainsResult] = await Promise.allSettled([
           fetchActiveInternshipPlans(),
@@ -147,6 +177,27 @@ export function EnrollForm() {
     if (!college.trim()) nextErrors.college = "College is required";
     if (!yearOfStudy) nextErrors.year_of_study = "Year of study is required";
 
+    if (!certificateName.trim()) {
+      nextErrors.certificate_name = "Full name for certificate is required";
+    }
+
+    if (!internshipStartDate) {
+      nextErrors.internship_start_date = "Start date is required";
+    }
+
+    if (!internshipEndDate) {
+      nextErrors.internship_end_date = "End date is required";
+    } else if (
+      internshipStartDate &&
+      duration > 0 &&
+      !isInternshipEndDateValid(internshipStartDate, internshipEndDate, duration)
+    ) {
+      const maxLabel = maxEndDate ? formatIsoDateDdMmYyyy(maxEndDate) : "";
+      nextErrors.internship_end_date = maxLabel
+        ? `End date must be between ${formatIsoDateDdMmYyyy(internshipStartDate)} and ${maxLabel}`
+        : "End date is outside the selected internship duration";
+    }
+
     return nextErrors;
   }
 
@@ -173,6 +224,9 @@ export function EnrollForm() {
           chosen_duration_weeks: Number(durationWeeks),
           college: college.trim(),
           year_of_study: yearOfStudy,
+          certificate_name: certificateName.trim(),
+          internship_start_date: internshipStartDate,
+          internship_end_date: internshipEndDate,
         },
         token,
       );
@@ -247,6 +301,7 @@ export function EnrollForm() {
             const nextPlan = plans.find((plan) => plan.id === nextPlanId) ?? null;
             setPlanId(nextPlanId);
             setDurationWeeks(nextPlan ? String(nextPlan.min_duration_weeks) : "");
+            setInternshipEndDate("");
             setErrors((current) => ({
               ...current,
               internship_plan_id: undefined,
@@ -276,9 +331,11 @@ export function EnrollForm() {
             value={durationWeeks}
             onChange={(event) => {
               setDurationWeeks(event.target.value);
+              setInternshipEndDate("");
               setErrors((current) => ({
                 ...current,
                 chosen_duration_weeks: undefined,
+                internship_end_date: undefined,
                 form: undefined,
               }));
             }}
@@ -325,6 +382,67 @@ export function EnrollForm() {
           ))}
         </Select>
 
+        <Input
+          label="Full name (for offer letter & certificate)"
+          name="certificate_name"
+          value={certificateName}
+          onChange={(event) => {
+            setCertificateName(event.target.value);
+            setErrors((current) => ({ ...current, certificate_name: undefined, form: undefined }));
+          }}
+          error={errors.certificate_name}
+          placeholder="As it should appear on official documents"
+          required
+        />
+
+        <div className="grid gap-5 sm:grid-cols-2">
+          <DateInput
+            label="Internship start date"
+            name="internship_start_date"
+            value={internshipStartDate}
+            onChange={(nextValue) => {
+              setInternshipStartDate(nextValue);
+              setInternshipEndDate("");
+              setErrors((current) => ({
+                ...current,
+                internship_start_date: undefined,
+                internship_end_date: undefined,
+                form: undefined,
+              }));
+            }}
+            error={errors.internship_start_date}
+            required
+          />
+          <DateInput
+            label="Internship end date"
+            name="internship_end_date"
+            value={internshipEndDate}
+            min={internshipStartDate || undefined}
+            max={maxEndDate || undefined}
+            onChange={(nextValue) => {
+              setInternshipEndDate(nextValue);
+              setErrors((current) => ({
+                ...current,
+                internship_end_date: undefined,
+                form: undefined,
+              }));
+            }}
+            error={errors.internship_end_date}
+            disabled={!internshipStartDate || !maxEndDate}
+            required
+          />
+        </div>
+        <p className="text-ink-muted -mt-2 text-xs">
+          Dates use DD/MM/YYYY and will be printed on your offer letter and internship certificate.
+          {internshipStartDate && maxEndDate ? (
+            <>
+              {" "}
+              For {duration} week{duration === 1 ? "" : "s"}, select an end date up to{" "}
+              {formatIsoDateDdMmYyyy(maxEndDate)}.
+            </>
+          ) : null}
+        </p>
+
         {errors.form ? (
           <p className="bg-danger-bg text-danger rounded-lg px-4 py-3 text-sm" role="alert">
             {errors.form}
@@ -339,6 +457,8 @@ export function EnrollForm() {
         >
           Complete enrollment
         </Button>
+
+        <SupportContactNote className="text-center text-xs" />
       </form>
     </AuthCard>
   );
