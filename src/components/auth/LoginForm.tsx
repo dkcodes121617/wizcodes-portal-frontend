@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 import { AuthCard, AuthLink } from "@/components/auth/AuthCard";
+import { TermsAcceptanceField } from "@/components/legal/TermsAcceptanceField";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { ApiError } from "@/lib/api";
@@ -18,6 +19,7 @@ interface FormState {
 interface FieldErrors {
   identifier?: string;
   password?: string;
+  acceptTerms?: string;
   form?: string;
 }
 
@@ -25,6 +27,7 @@ export function LoginForm() {
   const router = useRouter();
   const [values, setValues] = useState<FormState>({ identifier: "", password: "" });
   const [errors, setErrors] = useState<FieldErrors>({});
+  const [acceptTerms, setAcceptTerms] = useState(false);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -37,6 +40,9 @@ export function LoginForm() {
     if (!values.password) {
       nextErrors.password = "Password is required";
     }
+    if (!acceptTerms) {
+      nextErrors.acceptTerms = "You must accept the Terms & Conditions to continue";
+    }
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
@@ -45,6 +51,7 @@ export function LoginForm() {
       const response = await api.post<TokenResponse>("/api/v1/auth/student/login", {
         identifier: values.identifier.trim(),
         password: values.password,
+        accepted_terms: true,
       });
       setToken(response.access_token);
       router.push("/dashboard");
@@ -104,7 +111,16 @@ export function LoginForm() {
           </p>
         ) : null}
 
-        <Button type="submit" className="w-full" loading={loading}>
+        <TermsAcceptanceField
+          checked={acceptTerms}
+          onChange={(checked) => {
+            setAcceptTerms(checked);
+            setErrors((current) => ({ ...current, acceptTerms: undefined, form: undefined }));
+          }}
+          error={errors.acceptTerms}
+        />
+
+        <Button type="submit" className="w-full" loading={loading} disabled={!acceptTerms}>
           Log in
         </Button>
       </form>

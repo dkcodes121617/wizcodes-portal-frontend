@@ -7,12 +7,10 @@ import { Button } from "@/components/ui/Button";
 import { SupportContactNote } from "@/components/support/SupportContactNote";
 
 const PAYMENT_DETAILS = {
-  accountName: "Patel Divya Baijukumar",
-  upiId: "7862036533@ptaxis",
-  upiNumber: "7862036533",
+  upiId: "divyapatel12079@okaxis",
 } as const;
 
-const QR_CODE_PATH = "/payment-qrcode.png";
+const QR_CODE_PATH = "/gpayqr.png";
 
 function CopyButton({ value, label }: { value: string; label: string }) {
   const [copied, setCopied] = useState(false);
@@ -83,13 +81,7 @@ export function PaymentInstructions() {
       </div>
 
       <dl className="mt-4 space-y-4">
-        <DetailRow label="Account name" value={PAYMENT_DETAILS.accountName} />
         <DetailRow label="UPI ID" value={PAYMENT_DETAILS.upiId} copyLabel="UPI ID" />
-        <DetailRow
-          label="UPI number"
-          value={PAYMENT_DETAILS.upiNumber}
-          copyLabel="UPI number"
-        />
       </dl>
 
       <SupportContactNote className="border-border mt-4 border-t pt-4" />

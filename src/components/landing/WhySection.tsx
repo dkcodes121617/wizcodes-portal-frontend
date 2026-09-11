@@ -51,15 +51,20 @@ export function WhySection() {
           </p>
         </ScrollReveal>
 
-        <div className="mt-8 grid gap-3 sm:mt-12 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
+        <div className="mt-6 grid gap-2 sm:mt-12 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
           {VALUES.map((item, index) => (
             <ScrollReveal key={item.title} delay={index * 0.05}>
-              <article className="value-card h-full rounded-xl p-4 sm:p-6">
-                <span className="value-card-icon text-brand" aria-hidden>
-                  <item.Icon className="h-5 w-5" />
+              <article className="value-card h-full rounded-lg p-3 sm:rounded-xl sm:p-6">
+                <span
+                  className="value-card-icon text-brand h-8 w-8 sm:h-10 sm:w-10"
+                  aria-hidden
+                >
+                  <item.Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                 </span>
-                <h3 className="item-title mt-3 sm:mt-5">{item.title}</h3>
-                <p className="section-body mt-2 text-sm">{item.detail}</p>
+                <h3 className="item-title mt-2 text-sm sm:mt-4 sm:text-base">{item.title}</h3>
+                <p className="section-body mt-1.5 text-xs leading-relaxed sm:mt-2 sm:text-sm">
+                  {item.detail}
+                </p>
               </article>
             </ScrollReveal>
           ))}

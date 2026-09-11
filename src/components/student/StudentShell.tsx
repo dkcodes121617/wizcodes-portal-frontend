@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 
 import { NotificationCenter } from "@/components/notifications/NotificationCenter";
-import { Button } from "@/components/ui/Button";
+import { StudentSessionControls } from "@/components/auth/StudentSessionControls";
 import { ApiError, api } from "@/lib/api";
 import { clearToken, getToken, type StudentProfile } from "@/lib/auth";
 
@@ -76,23 +76,17 @@ export function StudentShell({ children }: { children: ReactNode }) {
       <header className="border-border bg-surface sticky top-0 z-40 border-b">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4">
           <div className="min-w-0">
-            <Link href="/dashboard" className="text-xl font-bold tracking-tight">
+            <Link href="/" className="text-xl font-bold tracking-tight">
               <span className="text-wordmark-wiz">Wiz</span>
               <span className="text-wordmark-codes">Codes</span>
             </Link>
-            {student ? (
-              <p className="text-ink-muted mt-0.5 truncate text-xs">
-                Signed in as {student.name}
-              </p>
-            ) : null}
           </div>
 
-          <div className="flex items-center gap-3">
-            <NotificationCenter />
-            <Button variant="secondary" onClick={handleLogout}>
-              Log out
-            </Button>
-          </div>
+          <StudentSessionControls
+            studentName={student?.name ?? null}
+            onLogout={handleLogout}
+            leadingSlot={<NotificationCenter />}
+          />
         </div>
       </header>
 

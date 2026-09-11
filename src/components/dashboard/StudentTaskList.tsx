@@ -40,11 +40,15 @@ function TaskCard({
   onUpdated: (updated: StudentTaskAssignment) => void;
 }) {
   const [link, setLink] = useState(assignment.submission_link ?? "");
+  const [editing, setEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const status = assignment.status as AssignmentStatus;
   const canSubmit = status === "assigned" || status === "in_progress" || status === "submitted";
+  const hasSubmission = Boolean(assignment.submission_link);
+  const showSubmittedSummary = status === "submitted" && hasSubmission && !editing;
+  const isFirstSubmission = !hasSubmission;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -67,6 +71,7 @@ function TaskCard({
     try {
       const updated = await submitTaskAssignment(assignment.id, link.trim(), token);
       onUpdated(updated);
+      setEditing(false);
     } catch (cause) {
       setError(
         cause instanceof ApiError ? cause.message : "Submission failed. Please try again.",
@@ -113,18 +118,34 @@ function TaskCard({
         </div>
       ) : null}
 
-      {canSubmit ? (
+      {canSubmit && showSubmittedSummary ? (
+        <div className="mt-4 space-y-3">
+          <SubmissionLink href={assignment.submission_link!} label="Current submission" />
+          <button
+            type="button"
+            onClick={() => {
+              setEditing(true);
+              setError(null);
+            }}
+            className="text-brand hover:text-brand-strong text-sm font-medium transition-colors"
+          >
+            Edit submission link
+          </button>
+        </div>
+      ) : null}
+
+      {canSubmit && !showSubmittedSummary ? (
         <form
           className="mt-4 space-y-3"
           onSubmit={(event) => void handleSubmit(event)}
           noValidate
         >
-          {assignment.submission_link && status === "submitted" ? (
-            <SubmissionLink href={assignment.submission_link} label="Current submission" />
+          {hasSubmission && editing ? (
+            <SubmissionLink href={assignment.submission_link!} label="Current submission" />
           ) : null}
 
           <Input
-            label={assignment.submission_link ? "Update submission link" : "Submission link"}
+            label="Submission link"
             name={`submission-${assignment.id}`}
             type="url"
             placeholder="https://your-project.example.com or deployment URL"
@@ -138,9 +159,31 @@ function TaskCard({
             required
           />
 
-          <Button type="submit" className="w-full" loading={submitting} disabled={submitting}>
-            {assignment.submission_link ? "Update submission" : "Submit"}
-          </Button>
+          <div className="flex flex-col gap-2 sm:flex-row">
+            {editing ? (
+              <Button
+                type="button"
+                variant="secondary"
+                className="w-full sm:w-auto"
+                disabled={submitting}
+                onClick={() => {
+                  setEditing(false);
+                  setLink(assignment.submission_link ?? "");
+                  setError(null);
+                }}
+              >
+                Cancel
+              </Button>
+            ) : null}
+            <Button
+              type="submit"
+              className="w-full sm:flex-1"
+              loading={submitting}
+              disabled={submitting}
+            >
+              {isFirstSubmission ? "Submit" : "Update submission"}
+            </Button>
+          </div>
         </form>
       ) : null}
     </article>

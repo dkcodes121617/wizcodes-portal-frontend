@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 
+import { useIsAuthenticated } from "@/hooks/use-is-authenticated";
 import { SUPPORT_EMAIL, SUPPORT_EMAIL_HREF } from "@/lib/support";
 
 function Wordmark() {
@@ -14,6 +17,8 @@ function Wordmark() {
 const footerLink = "text-ink-secondary hover:text-ink text-sm transition-colors";
 
 export function LandingFooter() {
+  const signedIn = useIsAuthenticated();
+
   return (
     <footer className="landing-footer border-border border-t">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
@@ -51,14 +56,25 @@ export function LandingFooter() {
           <div>
             <p className="text-ink text-sm font-semibold">Account</p>
             <nav className="mt-4 flex flex-col gap-3" aria-label="Footer account links">
-              <Link href="/login" className={footerLink}>
-                Sign in
-              </Link>
-              <Link href="/signup" className={footerLink}>
-                Create account
-              </Link>
+              {signedIn ? (
+                <Link href="/dashboard" className={footerLink}>
+                  Dashboard
+                </Link>
+              ) : (
+                <>
+                  <Link href="/login" className={footerLink}>
+                    Sign in
+                  </Link>
+                  <Link href="/signup" className={footerLink}>
+                    Create account
+                  </Link>
+                </>
+              )}
               <Link href="/enroll" className={footerLink}>
                 Enroll
+              </Link>
+              <Link href="/terms" className={footerLink}>
+                Terms &amp; Conditions
               </Link>
             </nav>
           </div>

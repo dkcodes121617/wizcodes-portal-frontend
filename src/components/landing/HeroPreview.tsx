@@ -70,7 +70,12 @@ export function HeroPreview() {
 
         <div className="hero-preview-footer">
           <span>Certificate on completion</span>
-          <span className="text-brand font-medium">View roadmap →</span>
+          <a
+            href="#how-it-works"
+            className="text-brand hover:text-brand-strong font-medium transition-colors"
+          >
+            View roadmap →
+          </a>
         </div>
       </div>
     </div>

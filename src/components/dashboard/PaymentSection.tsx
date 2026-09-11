@@ -11,6 +11,7 @@ import type { StudentProfile } from "@/lib/auth";
 import { getToken } from "@/lib/auth";
 import {
   PAYMENT_ACCESS_PENDING,
+  PAYMENT_SCREENSHOT_MAX_LABEL,
   STUDENT_PAYMENT_SCREENSHOT_VIEW_PATH,
   uploadPaymentScreenshot,
   validatePaymentScreenshotFile,
@@ -100,11 +101,7 @@ export function PaymentSection({ student, onStudentUpdated }: PaymentSectionProp
     <section className="border-border mt-8 rounded-xl border px-5 py-4 text-left">
       <p className="text-ink-muted text-xs font-medium tracking-wide uppercase">Payment</p>
 
-      {hasScreenshot ? (
-        <p className="bg-success-bg text-success mt-3 rounded-lg px-4 py-3 text-sm">
-          Screenshot uploaded — waiting for admin review.
-        </p>
-      ) : (
+      {hasScreenshot ? null : (
         <p className="text-ink-secondary mt-3 text-sm">
           Pay using the UPI details below, then upload a screenshot of your successful payment.
         </p>
@@ -126,14 +123,19 @@ export function PaymentSection({ student, onStudentUpdated }: PaymentSectionProp
       ) : null}
 
       <div className="mt-4 space-y-3">
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/jpeg,image/png,image/webp,image/gif"
-          className="border-border bg-surface text-ink file:bg-surface-raised file:text-ink w-full rounded-lg border px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:px-3 file:py-1.5 file:text-sm"
-          onChange={handleFileChange}
-          disabled={uploading}
-        />
+        <div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            className="border-border bg-surface text-ink file:bg-surface-raised file:text-ink w-full rounded-lg border px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:px-3 file:py-1.5 file:text-sm"
+            onChange={handleFileChange}
+            disabled={uploading}
+          />
+          <p className="text-ink-muted mt-2 text-xs">
+            Maximum file size: {PAYMENT_SCREENSHOT_MAX_LABEL}. Larger images cannot be uploaded.
+          </p>
+        </div>
 
         {uploadError ? (
           <p className="bg-danger-bg text-danger rounded-lg px-4 py-3 text-sm" role="alert">
@@ -150,6 +152,16 @@ export function PaymentSection({ student, onStudentUpdated }: PaymentSectionProp
         >
           {hasScreenshot ? "Replace payment screenshot" : "Upload payment screenshot"}
         </Button>
+
+        {hasScreenshot ? (
+          <div className="bg-success-bg space-y-1 rounded-lg px-4 py-3 text-sm">
+            <p className="text-success font-medium">Payment proof uploaded successfully.</p>
+            <p className="text-success/90">
+              You can close this page for now. Your dashboard will update once your payment is
+              verified and access is granted.
+            </p>
+          </div>
+        ) : null}
       </div>
 
       <SupportContactNote className="mt-4" />

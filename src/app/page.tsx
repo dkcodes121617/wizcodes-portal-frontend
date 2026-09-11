@@ -1,16 +1,17 @@
-import { AiMlIcon, MobileDevIcon, WebDevIcon } from "@/components/landing/domain-icons";
 import { DomainBentoGrid, DomainBentoHeader } from "@/components/landing/DomainBentoGrid";
 import { FinalCtaSection } from "@/components/landing/FinalCtaSection";
 import { HeroBadge } from "@/components/landing/HeroBadge";
+import { HeroCtaButtons } from "@/components/landing/HeroCtaButtons";
 import { HeroExperience } from "@/components/landing/HeroExperience";
 import { HowItWorksTimeline } from "@/components/landing/HowItWorksTimeline";
 import { LandingFooter } from "@/components/landing/LandingFooter";
 import { LandingNav } from "@/components/landing/LandingNav";
+import { PricingCard } from "@/components/landing/PricingCard";
 import { ScrollReveal } from "@/components/landing/ScrollReveal";
 import { StatsStrip } from "@/components/landing/StatsStrip";
 import { TrustBar } from "@/components/landing/TrustBar";
 import { WhySection } from "@/components/landing/WhySection";
-import Link from "next/link";
+import { AiMlIcon, MobileDevIcon, WebDevIcon } from "@/components/landing/domain-icons";
 
 const DOMAINS = [
   {
@@ -72,14 +73,7 @@ export default function Home() {
             with certificates employers recognize. Plans start at ₹299.
           </p>
 
-          <div className="mt-6 flex flex-col items-center justify-center gap-2.5 sm:mt-8 sm:gap-3 sm:flex-row">
-            <Link href="/signup" className="btn-primary btn-primary-lg">
-              Start internship
-            </Link>
-            <a href="#domains" className="btn-secondary">
-              View domains
-            </a>
-          </div>
+          <HeroCtaButtons />
 
           <TrustBar />
         </HeroExperience>
@@ -150,54 +144,5 @@ export default function Home() {
 
       <LandingFooter />
     </>
-  );
-}
-
-function PricingCard({
-  name,
-  price,
-  duration,
-  features,
-  highlighted = false,
-}: {
-  name: string;
-  price: string;
-  duration: string;
-  features: string[];
-  highlighted?: boolean;
-}) {
-  return (
-    <article className={`pricing-panel ${highlighted ? "pricing-panel-featured" : ""}`}>
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <h3 className="text-ink text-lg font-semibold">{name}</h3>
-          {highlighted ? <p className="text-ink-muted mt-1 text-sm">{duration}</p> : null}
-        </div>
-
-        {highlighted ? (
-          <span className="pricing-panel-badge shrink-0">Recommended</span>
-        ) : (
-          <p className="text-ink-muted shrink-0 text-sm">{duration}</p>
-        )}
-      </div>
-
-      <p className="pricing-panel-price mt-4 sm:mt-5">{price}</p>
-      <p className="text-ink-muted mt-1 text-sm">per internship</p>
-
-      <ul className="border-border mt-5 space-y-2.5 border-t pt-5 sm:mt-8 sm:space-y-3 sm:pt-8">
-        {features.map((feature) => (
-          <li key={feature} className="pricing-panel-feature">
-            {feature}
-          </li>
-        ))}
-      </ul>
-
-      <Link
-        href="/signup"
-        className={`mt-5 w-full text-center sm:mt-8 ${highlighted ? "btn-primary" : "btn-secondary"}`}
-      >
-        Get started
-      </Link>
-    </article>
   );
 }

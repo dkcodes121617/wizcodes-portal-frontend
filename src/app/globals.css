@@ -975,20 +975,31 @@
 
   .value-card-icon {
     display: inline-flex;
-    height: 2.5rem;
-    width: 2.5rem;
     align-items: center;
     justify-content: center;
-    border-radius: 0.625rem;
+    border-radius: 0.5rem;
     background: var(--color-baby-wash);
+  }
+
+  @media (min-width: 640px) {
+    .value-card-icon {
+      border-radius: 0.625rem;
+    }
   }
 
   .domain-card {
     height: 100%;
     border: 1px solid var(--color-border);
-    border-radius: 0.875rem;
-    padding: 1.5rem;
+    border-radius: 0.75rem;
+    padding: 0.75rem;
     transition: border-color 0.2s ease;
+  }
+
+  @media (min-width: 640px) {
+    .domain-card {
+      border-radius: 0.875rem;
+      padding: 1.5rem;
+    }
   }
 
   .domain-card:hover {
@@ -1186,17 +1197,16 @@
     }
 
     .value-card-icon {
-      height: 2rem;
-      width: 2rem;
+      border-radius: 0.5rem;
+    }
+
+    .item-title {
+      font-size: 0.875rem;
+      line-height: 1.35;
     }
 
     .domain-card {
-      padding: 1rem;
-    }
-
-    .domain-card-icon {
-      height: 2.5rem;
-      width: 2.5rem;
+      padding: 0.75rem;
     }
 
     .pricing-panel {

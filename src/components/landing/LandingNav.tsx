@@ -1,4 +1,9 @@
+"use client";
+
 import Link from "next/link";
+
+import { StudentSessionControls } from "@/components/auth/StudentSessionControls";
+import { useStudentSession } from "@/hooks/use-student-session";
 
 function Wordmark() {
   return (
@@ -12,12 +17,14 @@ function Wordmark() {
 const navLink = "text-ink-secondary hover:text-ink text-sm font-medium transition-colors";
 
 export function LandingNav() {
+  const { signedIn, studentName, loadingProfile, logout } = useStudentSession();
+
   return (
     <header className="landing-nav sticky top-0 z-50">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-4">
-        <Link href="/" className="shrink-0">
+        <a href="#" className="shrink-0" aria-label="Back to top">
           <Wordmark />
-        </Link>
+        </a>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Main">
           <a href="#domains" className={navLink}>
@@ -35,12 +42,22 @@ export function LandingNav() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link href="/login" className={`${navLink} hidden sm:inline`}>
-            Sign in
-          </Link>
-          <Link href="/signup" className="btn-primary">
-            Get started
-          </Link>
+          {signedIn ? (
+            <StudentSessionControls
+              studentName={studentName}
+              loading={loadingProfile}
+              onLogout={logout}
+            />
+          ) : (
+            <>
+              <Link href="/login" className={`${navLink} hidden sm:inline`}>
+                Sign in
+              </Link>
+              <Link href="/signup" className="btn-primary">
+                Get started
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>

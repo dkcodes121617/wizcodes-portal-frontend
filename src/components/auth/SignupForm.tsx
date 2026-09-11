@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 import { AuthCard, AuthLink } from "@/components/auth/AuthCard";
+import { TermsAcceptanceField } from "@/components/legal/TermsAcceptanceField";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { ApiError } from "@/lib/api";
@@ -24,10 +25,11 @@ interface FieldErrors {
   phone?: string;
   password?: string;
   confirmPassword?: string;
+  acceptTerms?: string;
   form?: string;
 }
 
-function validate(values: FormState): FieldErrors {
+function validate(values: FormState, acceptTerms: boolean): FieldErrors {
   const errors: FieldErrors = {};
 
   if (!values.name.trim()) {
@@ -57,6 +59,10 @@ function validate(values: FormState): FieldErrors {
     errors.confirmPassword = "Passwords do not match";
   }
 
+  if (!acceptTerms) {
+    errors.acceptTerms = "You must accept the Terms & Conditions to continue";
+  }
+
   return errors;
 }
 
@@ -70,11 +76,12 @@ export function SignupForm() {
     confirmPassword: "",
   });
   const [errors, setErrors] = useState<FieldErrors>({});
+  const [acceptTerms, setAcceptTerms] = useState(false);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const nextErrors = validate(values);
+    const nextErrors = validate(values, acceptTerms);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
@@ -85,6 +92,7 @@ export function SignupForm() {
         email: values.email.trim() || undefined,
         phone: values.phone.trim().replace(/\s+/g, "") || undefined,
         password: values.password,
+        accepted_terms: true,
       };
 
       const response = await api.post<TokenResponse>("/api/v1/auth/student/signup", payload);
@@ -177,7 +185,16 @@ export function SignupForm() {
           </p>
         ) : null}
 
-        <Button type="submit" className="w-full" loading={loading}>
+        <TermsAcceptanceField
+          checked={acceptTerms}
+          onChange={(checked) => {
+            setAcceptTerms(checked);
+            setErrors((current) => ({ ...current, acceptTerms: undefined, form: undefined }));
+          }}
+          error={errors.acceptTerms}
+        />
+
+        <Button type="submit" className="w-full" loading={loading} disabled={!acceptTerms}>
           Create account
         </Button>
       </form>

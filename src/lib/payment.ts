@@ -16,7 +16,8 @@ export function adminPaymentScreenshotPath(studentId: string): string {
 export const PAYMENT_ACCESS_PENDING = "pending";
 export const PAYMENT_ACCESS_GRANTED = "granted";
 
-export const PAYMENT_SCREENSHOT_MAX_BYTES = 10 * 1024 * 1024;
+export const PAYMENT_SCREENSHOT_MAX_BYTES = 500 * 1024;
+export const PAYMENT_SCREENSHOT_MAX_LABEL = "500 KB";
 
 const ALLOWED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
 
@@ -25,7 +26,7 @@ export function validatePaymentScreenshotFile(file: File): string | null {
     return "Only image files are allowed (JPEG, PNG, WebP, or GIF).";
   }
   if (file.size > PAYMENT_SCREENSHOT_MAX_BYTES) {
-    return "Payment screenshot must be 10 MB or smaller.";
+    return `Payment screenshot must be ${PAYMENT_SCREENSHOT_MAX_LABEL} or smaller.`;
   }
   if (file.size === 0) {
     return "Selected file is empty.";
