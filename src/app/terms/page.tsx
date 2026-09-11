@@ -103,9 +103,7 @@ const SECTIONS = [
   },
   {
     title: "14. Contact",
-    body: [
-      `For support, payment queries, or legal notices, contact us at ${SUPPORT_EMAIL}.`,
-    ],
+    body: [`For support, payment queries, or legal notices, contact us at ${SUPPORT_EMAIL}.`],
   },
 ] as const;
 

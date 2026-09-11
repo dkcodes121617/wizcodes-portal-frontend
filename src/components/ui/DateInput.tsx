@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 
 import { formatIsoDateDdMmYyyy, parseDdMmYyyyToIso } from "@/lib/dates";
 
@@ -31,13 +31,15 @@ export function DateInput({
 }: DateInputProps) {
   const inputId = useId();
   const nativePickerRef = useRef<HTMLInputElement>(null);
-  const [text, setText] = useState("");
+  const [text, setText] = useState(() => (value ? formatIsoDateDdMmYyyy(value) : ""));
   const [localError, setLocalError] = useState<string | undefined>();
+  const [previousValue, setPreviousValue] = useState(value);
 
-  useEffect(() => {
+  if (value !== previousValue) {
+    setPreviousValue(value);
     setText(value ? formatIsoDateDdMmYyyy(value) : "");
     setLocalError(undefined);
-  }, [value]);
+  }
 
   function commitText(nextText: string) {
     const trimmed = nextText.trim();

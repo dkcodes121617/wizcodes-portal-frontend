@@ -20,7 +20,7 @@ export function FinalCtaSection() {
               ? "Your dashboard has your enrollment, payment status, and assigned tasks."
               : "Join students across India who are building portfolio-ready work with structured tasks, mentor support, and credentials that matter."}
           </p>
-          <div className="mt-6 flex flex-col items-center justify-center gap-2.5 sm:mt-9 sm:gap-3 sm:flex-row">
+          <div className="mt-6 flex flex-col items-center justify-center gap-2.5 sm:mt-9 sm:flex-row sm:gap-3">
             {signedIn ? (
               <Link href="/dashboard" className="btn-primary btn-primary-lg">
                 Go to dashboard

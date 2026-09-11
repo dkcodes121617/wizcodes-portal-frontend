@@ -24,7 +24,7 @@ const AUDIENCE_OPTIONS: NotificationAudience[] = [
 
 export default function AdminNotificationsPage() {
   const [students, setStudents] = useState<AdminStudent[]>([]);
-  const [loadingStudents, setLoadingStudents] = useState(true);
+  const [loadingStudents, setLoadingStudents] = useState(() => Boolean(getAdminToken()));
   const [audience, setAudience] = useState<NotificationAudience>("single");
   const [studentId, setStudentId] = useState("");
   const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([]);
@@ -37,7 +37,6 @@ export default function AdminNotificationsPage() {
   useEffect(() => {
     const token = getAdminToken();
     if (!token) {
-      setLoadingStudents(false);
       return;
     }
 

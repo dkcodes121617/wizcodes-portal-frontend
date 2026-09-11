@@ -22,14 +22,14 @@ export function StudentSessionControls({
         <button
           type="button"
           onClick={onLogout}
-          className="border-border bg-surface text-ink inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-medium transition-colors hover:border-danger hover:bg-danger hover:text-white"
+          className="border-border bg-surface text-ink hover:border-danger hover:bg-danger inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-medium transition-colors hover:text-white"
         >
           Log out
         </button>
         <p className="text-ink-muted max-w-[10rem] truncate text-right text-xs sm:max-w-[14rem]">
           Signed in as{" "}
           <span className="text-ink font-medium">
-            {loading ? "…" : studentName ?? "student"}
+            {loading ? "…" : (studentName ?? "student")}
           </span>
         </p>
       </div>

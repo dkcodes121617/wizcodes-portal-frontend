@@ -74,13 +74,6 @@ export function EnrollForm() {
   }, [internshipStartDate, durationWeeks, duration]);
 
   useEffect(() => {
-    if (!internshipStartDate || !maxEndDate || !internshipEndDate) return;
-    if (internshipEndDate < internshipStartDate || internshipEndDate > maxEndDate) {
-      setInternshipEndDate("");
-    }
-  }, [internshipStartDate, maxEndDate]);
-
-  useEffect(() => {
     const token = getToken();
     if (!token) {
       router.replace("/login");
@@ -388,7 +381,11 @@ export function EnrollForm() {
           value={certificateName}
           onChange={(event) => {
             setCertificateName(event.target.value);
-            setErrors((current) => ({ ...current, certificate_name: undefined, form: undefined }));
+            setErrors((current) => ({
+              ...current,
+              certificate_name: undefined,
+              form: undefined,
+            }));
           }}
           error={errors.certificate_name}
           placeholder="As it should appear on official documents"
@@ -433,7 +430,8 @@ export function EnrollForm() {
           />
         </div>
         <p className="text-ink-muted -mt-2 text-xs">
-          Dates use DD/MM/YYYY and will be printed on your offer letter and internship certificate.
+          Dates use DD/MM/YYYY and will be printed on your offer letter and internship
+          certificate.
           {internshipStartDate && maxEndDate ? (
             <>
               {" "}

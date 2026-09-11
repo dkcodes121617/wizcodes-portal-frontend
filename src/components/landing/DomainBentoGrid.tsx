@@ -27,10 +27,7 @@ export function DomainBentoGrid({ domains }: DomainBentoGridProps) {
               <div
                 className={`domain-card-icon ${domain.accentClass} bg-surface border-border inline-flex h-8 w-8 items-center justify-center rounded-md border sm:h-11 sm:w-11 sm:rounded-lg`}
               >
-                <Icon
-                  className="h-4 w-4 sm:h-6 sm:w-6"
-                  idSuffix={`bento-${domain.id}`}
-                />
+                <Icon className="h-4 w-4 sm:h-6 sm:w-6" idSuffix={`bento-${domain.id}`} />
               </div>
               <h3 className="item-title mt-2 text-sm sm:mt-4 sm:text-base">{domain.name}</h3>
               <p className="section-body mt-1.5 text-xs leading-relaxed sm:mt-2 sm:text-sm">

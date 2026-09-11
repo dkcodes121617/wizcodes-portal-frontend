@@ -57,17 +57,24 @@ export function NotificationCenter() {
   }, []);
 
   useEffect(() => {
-    void loadNotifications();
-    const interval = window.setInterval(() => {
+    const runLoad = () => {
       void loadNotifications();
-    }, 60000);
-    return () => window.clearInterval(interval);
+    };
+
+    const initialTimer = window.setTimeout(runLoad, 0);
+    const interval = window.setInterval(runLoad, 60000);
+    return () => {
+      window.clearTimeout(initialTimer);
+      window.clearInterval(interval);
+    };
   }, [loadNotifications]);
 
   useEffect(() => {
     if (!open) return;
 
-    void loadNotifications();
+    const refreshTimer = window.setTimeout(() => {
+      void loadNotifications();
+    }, 0);
 
     function handleClickOutside(event: MouseEvent) {
       if (!panelRef.current?.contains(event.target as Node)) {
@@ -82,6 +89,7 @@ export function NotificationCenter() {
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("keydown", handleEscape);
     return () => {
+      window.clearTimeout(refreshTimer);
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleEscape);
     };

@@ -13,30 +13,19 @@ interface PaymentScreenshotImageProps {
   localPreviewUrl?: string | null;
 }
 
-export function PaymentScreenshotImage({
+function RemotePaymentScreenshotImage({
   token,
   apiPath,
   hasScreenshot,
   alt,
-  className = "",
-  localPreviewUrl = null,
-}: PaymentScreenshotImageProps) {
-  const [imageUrl, setImageUrl] = useState<string | null>(localPreviewUrl);
-  const [loading, setLoading] = useState(Boolean(hasScreenshot && token && !localPreviewUrl));
+  className,
+}: Omit<PaymentScreenshotImageProps, "localPreviewUrl"> & { token: string }) {
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    if (localPreviewUrl) {
-      setImageUrl(localPreviewUrl);
-      setLoading(false);
-      setFailed(false);
-      return;
-    }
-
-    if (!hasScreenshot || !token) {
-      setImageUrl(null);
-      setLoading(false);
-      setFailed(false);
+    if (!hasScreenshot) {
       return;
     }
 
@@ -44,8 +33,6 @@ export function PaymentScreenshotImage({
     let cancelled = false;
 
     async function loadScreenshot() {
-      if (!token) return;
-
       setLoading(true);
       setFailed(false);
 
@@ -70,7 +57,7 @@ export function PaymentScreenshotImage({
       cancelled = true;
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
-  }, [apiPath, hasScreenshot, localPreviewUrl, token]);
+  }, [apiPath, hasScreenshot, token]);
 
   if (loading) {
     return <p className="text-ink-muted text-sm">Loading screenshot…</p>;
@@ -92,4 +79,34 @@ export function PaymentScreenshotImage({
   }
 
   return null;
+}
+
+export function PaymentScreenshotImage({
+  token,
+  apiPath,
+  hasScreenshot,
+  alt,
+  className = "",
+  localPreviewUrl = null,
+}: PaymentScreenshotImageProps) {
+  if (localPreviewUrl) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- local file preview blob URL
+      <img src={localPreviewUrl} alt={alt} className={className} />
+    );
+  }
+
+  if (!hasScreenshot || !token) {
+    return null;
+  }
+
+  return (
+    <RemotePaymentScreenshotImage
+      token={token}
+      apiPath={apiPath}
+      hasScreenshot={hasScreenshot}
+      alt={alt}
+      className={className}
+    />
+  );
 }
