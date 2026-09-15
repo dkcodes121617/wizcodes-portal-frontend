@@ -41,3 +41,24 @@ export async function loginAdmin(email: string, password: string): Promise<Token
 export async function fetchAdminProfile(token: string): Promise<AdminProfile> {
   return api.get<AdminProfile>("/api/v1/auth/admin/me", { token });
 }
+
+export type AdminRole = AdminProfile["role"];
+
+export interface AdminCreateBody {
+  name: string;
+  email: string;
+  password: string;
+  role?: AdminRole;
+}
+
+export function isSuperAdmin(profile: AdminProfile): boolean {
+  return profile.role === "super_admin";
+}
+
+export async function fetchAdmins(token: string): Promise<AdminProfile[]> {
+  return api.get<AdminProfile[]>("/api/v1/auth/admin/admins", { token });
+}
+
+export async function createAdmin(token: string, body: AdminCreateBody): Promise<AdminProfile> {
+  return api.post<AdminProfile>("/api/v1/auth/admin/create", body, { token });
+}

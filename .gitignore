@@ -33,7 +33,6 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files — secrets never get committed, but the template does
-.env*
 !.env.example
 
 # vercel
@@ -45,5 +44,5 @@ next-env.d.ts
 
 # editors
 .idea/
-.vscode/*
 !.vscode/extensions.json
+config.bat

@@ -19,6 +19,7 @@ const NAV_ITEMS = [
   { href: "/admin/submissions", label: "Submissions" },
   { href: "/admin/plans", label: "Plans" },
   { href: "/admin/tasks", label: "Tasks" },
+  { href: "/admin/admins", label: "Admins", superAdminOnly: true },
 ] as const;
 
 function navClass(active: boolean): string {
@@ -104,7 +105,11 @@ export function AdminShell({ children }: { children: ReactNode }) {
         ) : null}
 
         <nav className="mt-6 space-y-1">
-          {NAV_ITEMS.map((item) => (
+          {NAV_ITEMS.filter(
+            (item) =>
+              !("superAdminOnly" in item && item.superAdminOnly) ||
+              admin?.role === "super_admin",
+          ).map((item) => (
             <Link
               key={item.href}
               href={item.href}
